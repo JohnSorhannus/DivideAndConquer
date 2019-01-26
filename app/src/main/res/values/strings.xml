@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Divide And Conquer</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="subtask_tab">Sub Tasks</string>
+    <string name="maintask_tab">Main Tasks</string>
+</resources>
