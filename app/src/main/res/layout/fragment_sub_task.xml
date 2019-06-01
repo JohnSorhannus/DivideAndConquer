@@ -8,7 +8,8 @@
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/sub_task_recycler_view">
+        android:id="@+id/sub_task_recycler_view"
+        tools:listitem="@layout/subtask_list_layout">
 
     </android.support.v7.widget.RecyclerView>
 

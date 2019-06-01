@@ -5,4 +5,21 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="subtask_tab">Sub Tasks</string>
     <string name="maintask_tab">Main Tasks</string>
+    <string name="add_task">Add Task</string>
+    <string name="add_subtask">Add Sub Task</string>
+    <string name="add_maintask">Add Main Task</string>
+    <string name="about">About</string>
+    <string name="completed">completed</string>
+    <string name="percent">%1$d%%</string>
+    <string name="due_date">Due Date: %1$s %2$s %3$d, %4$d</string>
+    <string name="name">Name</string>
+    <string name="due_date_add_task">Due Date</string>
+    <string name="set_color">Set Color</string>
+    <string name="color_set">Color Set</string>
+
+    <string-array name="date_picker">
+        <item>Today</item>
+        <item>Tomorrow</item>
+        <item>Pick a date...</item>
+    </string-array>
 </resources>
