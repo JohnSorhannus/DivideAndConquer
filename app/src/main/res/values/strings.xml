@@ -16,10 +16,5 @@
     <string name="due_date_add_task">Due Date</string>
     <string name="set_color">Set Color</string>
     <string name="color_set">Color Set</string>
-
-    <string-array name="date_picker">
-        <item>Today</item>
-        <item>Tomorrow</item>
-        <item>Pick a date...</item>
-    </string-array>
+    <string name="enter_title">Enter title...</string>
 </resources>
