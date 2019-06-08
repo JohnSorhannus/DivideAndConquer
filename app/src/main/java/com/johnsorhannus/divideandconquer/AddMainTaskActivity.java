@@ -24,6 +24,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,15 +40,19 @@ import yuku.ambilwarna.AmbilWarnaDialog;
 
 public class AddMainTaskActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
     private AddMainTaskViewModel viewModel;
-    private TextInputLayout textInputName;
+
+    //XML components
+    private EditText textInputName;
     private LinearLayout buttonColorPicker;
-    private TextInputLayout textInputDate;
-    private Button buttonAddMainTask;
-    private AppCompatSpinner spinner;
     private TextView circle;
-    int defaultColor;
-    int chosenColor;
-    Calendar chosenDate;
+    private LinearLayout buttonDueDatePicker;
+    private TextView textViewDueDate;
+    private Button buttonAddMainTask;
+
+    //values
+    int chosenColor; //defaults to blue
+    Calendar chosenDate; //defaults to week from current date
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -57,60 +62,27 @@ public class AddMainTaskActivity extends AppCompatActivity implements DatePicker
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //viewModel = new AddMainTaskViewModel(getApplicationContext());
-        chosenDate = null;
-
         viewModel = ViewModelProviders.of(this).get(AddMainTaskViewModel.class);
 
+        //Set Values
+        chosenColor = getResources().getColor(R.color.colorPrimary);
+        chosenDate = DueDateQueryLiterals.getWeekFromNow();
+
+        //Set UI components
         textInputName = findViewById(R.id.add_maintask_name);
         buttonColorPicker = findViewById(R.id.add_maintask_color);
-        //textInputDate = findViewById(R.id.add_maintask_date);
+        buttonDueDatePicker = findViewById(R.id.add_maintask_due_date);
         buttonAddMainTask = findViewById(R.id.add_maintask_button);
 
-        //cirlce
+        //due date
+        textViewDueDate = findViewById(R.id.add_maintask_selected_date);
+        textViewDueDate.setText(DateFormat.getDateInstance().format(chosenDate.getTime()));
+
+        //circle
         circle = findViewById(R.id.add_maintask_circle);
         ShapeDrawable drawable = new ShapeDrawable(new OvalShape());
-        drawable.getPaint().setColor(getResources().getColor(R.color.colorPrimary));
+        drawable.getPaint().setColor(chosenColor);
         circle.setBackground(drawable);
-
-        //spinner
-        spinner = findViewById(R.id.add_maintask_date_picker_spinner);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.date_picker, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                switch (position) {
-                    case 0:
-                        chosenDate = DueDateQueryLiterals.getCurrentDate();
-                        ((TextView) parent.getChildAt(0)).setText(DateFormat.getDateInstance().format(chosenDate.getTime()));
-                        break;
-                    case 1:
-                        chosenDate = DueDateQueryLiterals.getTomorrow();
-                        ((TextView) parent.getChildAt(0)).setText(DateFormat.getDateInstance().format(chosenDate.getTime()));
-                        break;
-                    case 2:
-                        DialogFragment datePicker = new DatePickerFragment();
-                        datePicker.show(getSupportFragmentManager(), "Date Picker");
-                        //while (chosenDate == null);
-                        //((TextView) parent.getChildAt(0)).setText(DateFormat.getDateInstance().format(chosenDate.getTime()));
-                        break;
-                    default:
-                        chosenDate = DueDateQueryLiterals.getCurrentDate();
-                        ((TextView) parent.getChildAt(0)).setText(DateFormat.getDateInstance().format(chosenDate.getTime()));
-                        break;
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
-        defaultColor = ContextCompat.getColor(AddMainTaskActivity.this, R.color.colorPrimary);
-        chosenColor = defaultColor;
 
         setTitle(R.string.add_maintask);
 
@@ -121,21 +93,18 @@ public class AddMainTaskActivity extends AppCompatActivity implements DatePicker
             }
         });
 
-        /*textInputDate.setOnClickListener(new View.OnClickListener() {
+        buttonAddMainTask.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addMainTask();
+            }
+        });
+
+        buttonDueDatePicker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 DialogFragment datePicker = new DatePickerFragment();
                 datePicker.show(getSupportFragmentManager(), "Date Picker");
-            }
-        });*/
-
-        buttonAddMainTask.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (validInput()) {
-                    //viewModel.insertMainTask();
-                    addMainTask();
-                }
             }
         });
 
@@ -161,7 +130,12 @@ public class AddMainTaskActivity extends AppCompatActivity implements DatePicker
     }
 
     private void addMainTask() {
-        String name = textInputName.getEditText().getText().toString().trim();
+        //String name = textInputName.getEditText().getText().toString().trim();
+        String name = textInputName.getText().toString().trim();
+
+        if (name.length() == 0) {
+            name = "No title";
+        }
 
         viewModel.insertMainTask(new MainTask(name, chosenColor, chosenDate));
         finish();
@@ -173,17 +147,13 @@ public class AddMainTaskActivity extends AppCompatActivity implements DatePicker
         date.set(Calendar.YEAR, year);
         date.set(Calendar.MONTH, month);
         date.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-        //textInputDate.setHint(DateFormat.getDateInstance().format(date.getTime()));
-        //spinner.setPrompt(DateFormat.getDateInstance().format(date.getTime()));
-        //(TextView )
-        //spinner.getAdapter().getView(0, TextView, ).getParent().
         chosenDate = date;
 
-
+        textViewDueDate.setText(DateFormat.getDateInstance().format(chosenDate.getTime()));
     }
 
     public void openColorPicker() {
-        AmbilWarnaDialog colorPicker = new AmbilWarnaDialog(this, defaultColor, new AmbilWarnaDialog.OnAmbilWarnaListener() {
+        AmbilWarnaDialog colorPicker = new AmbilWarnaDialog(this, chosenColor, new AmbilWarnaDialog.OnAmbilWarnaListener() {
             @Override
             public void onCancel(AmbilWarnaDialog dialog) {
 
@@ -191,37 +161,13 @@ public class AddMainTaskActivity extends AppCompatActivity implements DatePicker
 
             @Override
             public void onOk(AmbilWarnaDialog dialog, int color) {
-                defaultColor = color;
                 chosenColor = color;
 
                 ShapeDrawable drawable = new ShapeDrawable(new OvalShape());
                 drawable.getPaint().setColor(chosenColor);
                 circle.setBackground(drawable);
-                /*Drawable circle = getResources().getDrawable(R.drawable.circle);
-                circle = DrawableCompat.wrap(circle);
-                DrawableCompat.setTint(circle, chosenColor);
-                buttonColorPicker.setCompoundDrawables(circle, null, null, null);*/
-                //buttonColorPicker.setText(R.string.color_set);
             }
         });
         colorPicker.show();
     }
-
-    private boolean nameIsValid() {
-        String name = textInputName.getEditText().getText().toString().trim();
-
-        if (name.isEmpty()) {
-            textInputName.setError("Field cannot be empty");
-            return false;
-        } else {
-            textInputName.setError(null);
-            textInputName.setErrorEnabled(false);
-            return true;
-        }
-    }
-
-    public boolean validInput() {
-        return (nameIsValid());
-    }
-
 }

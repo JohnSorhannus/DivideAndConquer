@@ -23,6 +23,12 @@ public class DueDateQueryLiterals {
         return tomorrow;
     }
 
+    static public Calendar getWeekFromNow() {
+        Calendar week = clearTimeValues();
+        week.add(Calendar.DAY_OF_YEAR, 7);
+        return week;
+    }
+
     static public Calendar clearTimeValues() {
         Calendar date = Calendar.getInstance();
         date.set(Calendar.HOUR_OF_DAY, 0);
