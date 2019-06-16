@@ -139,12 +139,14 @@ public class MainActivity extends AppCompatActivity {
         switch(item.getItemId()) {
             case R.id.action_create_subtask:
                 //intent to create subtask activity
+                Intent createSubTaskIntent = new Intent(this, AddSubTaskActivity.class);
+                startActivity(createSubTaskIntent);
                 return true;
 
             case R.id.action_create_maintask:
                 //intent to create maintask activity
-                Intent intent = new Intent(this, AddMainTaskActivity.class);
-                startActivity(intent);
+                Intent createMainTaskIntent = new Intent(this, AddMainTaskActivity.class);
+                startActivity(createMainTaskIntent);
                 return true;
 
             case R.id.about:

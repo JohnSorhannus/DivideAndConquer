@@ -59,8 +59,12 @@ public class AddMainTaskActivity extends AppCompatActivity implements DatePicker
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_maintask);
 
+        //Display toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        //Add title to toolbar
+        setTitle(R.string.add_maintask);
 
         viewModel = ViewModelProviders.of(this).get(AddMainTaskViewModel.class);
 
@@ -83,8 +87,6 @@ public class AddMainTaskActivity extends AppCompatActivity implements DatePicker
         ShapeDrawable drawable = new ShapeDrawable(new OvalShape());
         drawable.getPaint().setColor(chosenColor);
         circle.setBackground(drawable);
-
-        setTitle(R.string.add_maintask);
 
         buttonColorPicker.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,6 +112,7 @@ public class AddMainTaskActivity extends AppCompatActivity implements DatePicker
 
     }
 
+    //Creates 'X' on toolbar
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
@@ -117,6 +120,7 @@ public class AddMainTaskActivity extends AppCompatActivity implements DatePicker
         return true;
     }
 
+    //Action when 'X' is hit
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
