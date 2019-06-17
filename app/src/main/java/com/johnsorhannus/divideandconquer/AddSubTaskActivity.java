@@ -1,6 +1,8 @@
 package com.johnsorhannus.divideandconquer;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.OvalShape;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
@@ -9,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -56,6 +59,26 @@ public class AddSubTaskActivity extends AppCompatActivity {
         buttonDueDatePicker = findViewById(R.id.add_subtask_due_date);
         textViewDueDate = findViewById(R.id.add_subtask_selected_date);
         buttonAddSubTask = findViewById(R.id.add_subtask_button);
+
+        //circle
+        circle = findViewById(R.id.maintask_color);
+        ShapeDrawable drawable = new ShapeDrawable(new OvalShape());
+        drawable.getPaint().setColor(circleColor);
+        circle.setBackground(drawable);
+
+        buttonMainTaskPicker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //open up a dialog box a spinner menu
+            }
+        });
+
+        buttonAddSubTask.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //add sub task
+            }
+        });
     }
 
     //These two functions are the same in both AddSubTask and AddMainTask. Any way to reduce repetitive code?
