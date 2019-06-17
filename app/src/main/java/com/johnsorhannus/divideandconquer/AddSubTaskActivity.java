@@ -9,11 +9,29 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.johnsorhannus.divideandconquer.viewmodels.AddSubTaskViewModel;
 
+import java.util.Calendar;
+
 public class AddSubTaskActivity extends AppCompatActivity {
     private AddSubTaskViewModel viewModel;
+
+    //XML components
+    private EditText textInputName;
+    private LinearLayout buttonMainTaskPicker;
+    private TextView circle;
+    private LinearLayout buttonDueDatePicker;
+    private TextView textViewDueDate;
+    private Button buttonAddSubTask;
+
+    //XML components
+    int circleColor;
+    Calendar chosenDate;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -28,6 +46,16 @@ public class AddSubTaskActivity extends AppCompatActivity {
 
         //Set title of toolbar
         setTitle(R.string.add_subtask);
+
+        //Set Values
+        circleColor = getResources().getColor(R.color.colorPrimary);
+
+        //Set UI components
+        textInputName = findViewById(R.id.add_subtask_name);
+        buttonMainTaskPicker = findViewById(R.id.select_maintask);
+        buttonDueDatePicker = findViewById(R.id.add_subtask_due_date);
+        textViewDueDate = findViewById(R.id.add_subtask_selected_date);
+        buttonAddSubTask = findViewById(R.id.add_subtask_button);
     }
 
     //These two functions are the same in both AddSubTask and AddMainTask. Any way to reduce repetitive code?

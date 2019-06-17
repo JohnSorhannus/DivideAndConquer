@@ -16,5 +16,6 @@
     <string name="due_date_add_task">Due Date</string>
     <string name="set_color">Set Color</string>
     <string name="color_set">Color Set</string>
-    <string name="enter_title">Enter title...</string>
+    <string name="enter_title">Enter name…</string>
+    <string name="select_maintask">Select Main Task</string>
 </resources>
