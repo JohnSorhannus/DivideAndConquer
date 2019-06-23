@@ -85,7 +85,7 @@ public class AppRepository {
     }
 
     public LiveData<List<MainTask>> retrieveActiveMainTasks() {
-        return database.getMainTaskDao().getActiveMainTasks();
+        return database.getMainTaskDao().getActiveMainTasks(getCurrentDate().getTimeInMillis());
     }
 
     /*public LiveData<Integer> retrieveNumActiveMainTasks() {

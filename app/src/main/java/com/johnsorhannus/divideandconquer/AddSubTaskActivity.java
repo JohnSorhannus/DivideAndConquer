@@ -104,7 +104,7 @@ public class AddSubTaskActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 chosenMainTask = (MainTask) parent.getItemAtPosition(position);
-                Toast.makeText(AddSubTaskActivity.this, chosenMainTask.getName() + " selected", Toast.LENGTH_SHORT);
+                Toast.makeText(AddSubTaskActivity.this, chosenMainTask.getName() + " selected", Toast.LENGTH_SHORT).show();
             }
 
             @Override

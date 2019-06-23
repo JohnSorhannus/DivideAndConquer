@@ -24,9 +24,9 @@ public interface MainTaskDao {
     @Query("SELECT DISTINCT mainTask.id, mainTask.name, mainTask.dueDate, mainTask.color\n" +
             "FROM mainTask\n" +
             "CROSS JOIN subTask\n" +
-            "WHERE (mainTask.id = subTask.mainTaskId AND subTask.completed IN (0)) OR mainTask.id != subTask.mainTaskId\n" +
+            "WHERE mainTask.dueDate >= :currentDateMillis AND ((mainTask.id = subTask.mainTaskId AND subTask.completed IN (0)) OR mainTask.id != subTask.mainTaskId)\n" +
             "ORDER BY mainTask.dueDate ASC;")
-    LiveData<List<MainTask>> getActiveMainTasks();
+    LiveData<List<MainTask>> getActiveMainTasks(final long currentDateMillis);
 
     @Query("SELECT mainTask.id, mainTask.name, mainTask.dueDate, mainTask.color FROM mainTask INNER JOIN subTask on mainTask.id = subTask.mainTaskId GROUP BY mainTask.id HAVING SUM(subTask.completed) = COUNT(*) ORDER BY mainTask.dueDate ASC;")
     LiveData<List<MainTask>> getCompletedMainTasks();
