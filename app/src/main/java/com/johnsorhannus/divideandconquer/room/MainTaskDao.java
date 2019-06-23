@@ -21,8 +21,12 @@ public interface MainTaskDao {
     LiveData<List<MainTask>> getOverdueMainTasks(final long currentDateMillis);
 
     //SUM PROBABLY RETURNS NULL, WHICH IS PROBABLY WHY MAIN TASK DOES NOT SHOW UP IF IT DOES NOT HAVE ANY SUBTASKS ASSOCIATED WITH IT
-    @Query("SELECT mainTask.id, mainTask.name, mainTask.dueDate, mainTask.color FROM mainTask INNER JOIN subTask on mainTask.id = subTask.mainTaskId WHERE mainTask.dueDate >= :currentDateMillis GROUP BY mainTask.id HAVING SUM(subTask.completed) < COUNT(*) ORDER BY mainTask.dueDate ASC;")
-    LiveData<List<MainTask>> getActiveMainTasks(final long currentDateMillis);
+    @Query("SELECT DISTINCT mainTask.id, mainTask.name, mainTask.dueDate, mainTask.color\n" +
+            "FROM mainTask\n" +
+            "CROSS JOIN subTask\n" +
+            "WHERE (mainTask.id = subTask.mainTaskId AND subTask.completed IN (0)) OR mainTask.id != subTask.mainTaskId\n" +
+            "ORDER BY mainTask.dueDate ASC;")
+    LiveData<List<MainTask>> getActiveMainTasks();
 
     @Query("SELECT mainTask.id, mainTask.name, mainTask.dueDate, mainTask.color FROM mainTask INNER JOIN subTask on mainTask.id = subTask.mainTaskId GROUP BY mainTask.id HAVING SUM(subTask.completed) = COUNT(*) ORDER BY mainTask.dueDate ASC;")
     LiveData<List<MainTask>> getCompletedMainTasks();

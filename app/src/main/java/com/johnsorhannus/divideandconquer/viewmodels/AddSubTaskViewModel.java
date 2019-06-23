@@ -29,8 +29,8 @@ public class AddSubTaskViewModel extends AndroidViewModel {
         repository.retrieveActiveMainTasks() returns an empty list of main tasks!!!! Check SQL statement!
          */
 
-        //return repository.retrieveActiveMainTasks();
+        return repository.retrieveActiveMainTasks();
 
-        return repository.retrieveAllMainTasks();
+        //return repository.retrieveAllMainTasks();
     }
 }
