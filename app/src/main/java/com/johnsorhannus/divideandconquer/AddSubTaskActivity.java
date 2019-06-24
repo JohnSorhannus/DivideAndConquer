@@ -1,5 +1,6 @@
 package com.johnsorhannus.divideandconquer;
 
+import android.app.DatePickerDialog;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.graphics.drawable.ShapeDrawable;
@@ -7,14 +8,17 @@ import android.graphics.drawable.shapes.OvalShape;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -26,7 +30,8 @@ import com.johnsorhannus.divideandconquer.viewmodels.AddSubTaskViewModel;
 import java.util.Calendar;
 import java.util.List;
 
-public class AddSubTaskActivity extends AppCompatActivity {
+public class AddSubTaskActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
+    private static final String TAG = "AddSubTaskActivity";
     private AddSubTaskViewModel viewModel;
 
     //XML components
@@ -104,6 +109,7 @@ public class AddSubTaskActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 chosenMainTask = (MainTask) parent.getItemAtPosition(position);
+                Log.d(TAG, "onItemSelected: position = " + position);
                 Toast.makeText(AddSubTaskActivity.this, chosenMainTask.getName() + " selected", Toast.LENGTH_SHORT).show();
             }
 
@@ -117,6 +123,19 @@ public class AddSubTaskActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //add sub task
+            }
+        });
+
+        buttonDueDatePicker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //DialogFragment datePicker = new DatePickerFragment(); //need to create a date picker fragment for AddSubTask
+                DatePickerFragment datePicker = DatePickerFragment.newInstance(chosenMainTask); //pass main task to picker to set max date
+                datePicker.show(getSupportFragmentManager(), "Date Picker");
+                //datePicker.
+                //((DatePickerFragment) datePicker).setMaxDate(chosenMainTask);
+                //datePicker.getDatePicker
+                //datePicker.setMin
             }
         });
     }
@@ -141,4 +160,11 @@ public class AddSubTaskActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+
+    @Override
+    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+        //view.set
+    }
+
+
 }
