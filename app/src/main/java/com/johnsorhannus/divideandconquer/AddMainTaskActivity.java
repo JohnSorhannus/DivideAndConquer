@@ -138,7 +138,7 @@ public class AddMainTaskActivity extends AppCompatActivity implements DatePicker
         String name = textInputName.getText().toString().trim();
 
         if (name.length() == 0) {
-            name = "No title";
+            name = getString(R.string.no_title);
         }
 
         viewModel.insertMainTask(new MainTask(name, chosenColor, chosenDate));

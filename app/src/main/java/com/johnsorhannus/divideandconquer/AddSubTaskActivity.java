@@ -1,8 +1,10 @@
 package com.johnsorhannus.divideandconquer;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.DialogInterface;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
 import android.os.Bundle;
@@ -27,6 +29,7 @@ import android.widget.Toast;
 
 import com.johnsorhannus.divideandconquer.viewmodels.AddSubTaskViewModel;
 
+import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.List;
 
@@ -66,7 +69,7 @@ public class AddSubTaskActivity extends AppCompatActivity implements DatePickerD
         setTitle(R.string.add_subtask);
 
         //Set Values
-        //circleColor = getResources().getColor(R.color.colorPrimary);
+        chosenDate = null;
 
         //Set UI components
         textInputName = findViewById(R.id.add_subtask_name);
@@ -109,7 +112,15 @@ public class AddSubTaskActivity extends AppCompatActivity implements DatePickerD
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 chosenMainTask = (MainTask) parent.getItemAtPosition(position);
+
+                //if the current date chosen is greater than the due date of the main task, set the chosenDate to null
+                if (chosenDate != null && (chosenMainTask.getDueDate().getTimeInMillis() > DueDateQueryLiterals.getCurrentDate().getTimeInMillis())) {
+                    Log.d(TAG, "onItemSelected: DATE INVALID. SET TO NULL");
+                    chosenDate = null;
+                }
+
                 Log.d(TAG, "onItemSelected: position = " + position);
+                //set chosenDate to null here?
                 Toast.makeText(AddSubTaskActivity.this, chosenMainTask.getName() + " selected", Toast.LENGTH_SHORT).show();
             }
 
@@ -123,6 +134,7 @@ public class AddSubTaskActivity extends AppCompatActivity implements DatePickerD
             @Override
             public void onClick(View v) {
                 //add sub task
+                addSubTask();
             }
         });
 
@@ -138,6 +150,29 @@ public class AddSubTaskActivity extends AppCompatActivity implements DatePickerD
                 //datePicker.setMin
             }
         });
+    }
+
+    private void addSubTask() {
+        String name = textInputName.getText().toString().trim();
+
+        //if user does not enter in a name
+        if (name.length() == 0) {
+            name = getString(R.string.no_title);
+        }
+
+        //check date
+        if (chosenDate == null) {
+            new AlertDialog.Builder(AddSubTaskActivity.this)
+                    .setTitle(getString(R.string.no_due_date_title))
+                    .setMessage(getString(R.string.no_due_date_message))
+                    .setPositiveButton(android.R.string.ok, null)
+                    .show();
+        } else {
+            //add sub task
+            viewModel.insertSubTask(new SubTask(name, chosenDate, chosenMainTask.getId()));
+            finish();
+        }
+
     }
 
     //These two functions are the same in both AddSubTask and AddMainTask. Any way to reduce repetitive code?
@@ -164,6 +199,13 @@ public class AddSubTaskActivity extends AppCompatActivity implements DatePickerD
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
         //view.set
+        Calendar date = DueDateQueryLiterals.clearTimeValues();
+        date.set(Calendar.YEAR, year);
+        date.set(Calendar.MONTH, month);
+        date.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+        chosenDate = date;
+
+        textViewDueDate.setText(DateFormat.getDateInstance().format(chosenDate.getTime()));
     }
 
 

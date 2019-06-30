@@ -18,4 +18,7 @@
     <string name="color_set">Color Set</string>
     <string name="enter_title">Enter name…</string>
     <string name="select_maintask">Select Main Task</string>
+    <string name="no_title">No name</string>
+    <string name="no_due_date_title">No Due Date</string>
+    <string name="no_due_date_message">No due date selected. Please select a due date.</string>
 </resources>
