@@ -141,6 +141,10 @@ public class SubTaskAdapter extends RecyclerView.Adapter<SubTaskAdapter.ViewHold
         return null;
     }
 
+    public SubTask getSubTaskAt(int position) {
+        return subTasks.get(position);
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView subTaskName;
         TextView mainTaskName;
