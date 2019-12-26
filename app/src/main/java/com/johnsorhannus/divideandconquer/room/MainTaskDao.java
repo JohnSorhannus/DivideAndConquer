@@ -21,6 +21,7 @@ public interface MainTaskDao {
     LiveData<List<MainTask>> getOverdueMainTasks(final long currentDateMillis);
 
     //SUM PROBABLY RETURNS NULL, WHICH IS PROBABLY WHY MAIN TASK DOES NOT SHOW UP IF IT DOES NOT HAVE ANY SUBTASKS ASSOCIATED WITH IT
+    //PROBLEM: SQL STATEMENT FAILS WHEN NOTHING EXISTS IN SUBTASK B/C CROSS JOIN PRODUCES (# OF ENTRIES IN MAINTASK x # OF ENTRIES IN SUBTASK) ENTRIES WHICH IS ALWAYS ZERO WITH NO SUBTASKS
     @Query("SELECT DISTINCT mainTask.id, mainTask.name, mainTask.dueDate, mainTask.color\n" +
             "FROM mainTask\n" +
             "CROSS JOIN subTask\n" +

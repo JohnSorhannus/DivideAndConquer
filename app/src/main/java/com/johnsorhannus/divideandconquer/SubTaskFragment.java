@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -89,7 +90,8 @@ public class SubTaskFragment extends Fragment {
 
         //init recyclerView
 
-        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+        /* DELETE FUNCTIONALITY */
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
             @Override
             public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder viewHolder1) {
                 return false;
@@ -97,8 +99,21 @@ public class SubTaskFragment extends Fragment {
 
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
-                //little menu on bottom to undue
-                viewModel.deleteSubTask(adapter.getSubTaskAt(viewHolder.getAdapterPosition()));
+                //TODO: Add a toast on bottom to undue
+                SubTask deletedSubTask = adapter.getSubTaskAt(viewHolder.getAdapterPosition());
+                viewModel.deleteSubTask(deletedSubTask);
+
+                StringBuilder builder = new StringBuilder();
+
+                //Make undo snackbar
+                Snackbar.make(getView(), builder.append(getResources().getString(R.string.delete_subtask_message1)).append(deletedSubTask.getName()).append(getResources().getString(R.string.delete_subtask_message2)), Snackbar.LENGTH_LONG)
+                        .setAction(getResources().getString(R.string.undo), new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                viewModel.insertSubTask(deletedSubTask);
+                                adapter.notifyDataSetChanged();
+                            }
+                        }).show();
             }
         }).attachToRecyclerView(recyclerView);
 

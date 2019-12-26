@@ -21,4 +21,12 @@
     <string name="no_title">No name</string>
     <string name="no_due_date_title">No Due Date</string>
     <string name="no_due_date_message">No due date selected. Please select a due date.</string>
+    <string name="delete_maintask_title">Delete Main Task</string>
+    <string name="delete_maintask_message1">Are you sure you want to delete the main task \"</string>
+    <string name="delete_maintask_message2">\"? All of its sub tasks will be deleted as well.</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="delete_subtask_message1">Sub task \"</string>
+    <string name="delete_subtask_message2">\" deleted</string>
+    <string name="undo">Undo</string>
 </resources>

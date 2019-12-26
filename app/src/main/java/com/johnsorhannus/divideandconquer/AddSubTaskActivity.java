@@ -104,6 +104,7 @@ public class AddSubTaskActivity extends AppCompatActivity implements DatePickerD
             public void onChanged(@Nullable List<MainTask> mainTasks) {
                 //spinnerAdapter.getMainTasks(mainTasks);
                 spinnerAdapter = new MainTaskSpinnerAdapter(getApplicationContext(), mainTasks);
+                Log.d(TAG, "onChanged: Loaded main task list of size " + mainTasks.size());
                 mainTaskSpinner.setAdapter(spinnerAdapter);
             }
         });

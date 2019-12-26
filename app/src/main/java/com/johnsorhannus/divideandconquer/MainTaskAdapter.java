@@ -69,6 +69,10 @@ public class MainTaskAdapter extends RecyclerView.Adapter<MainTaskAdapter.ViewHo
         notifyDataSetChanged();
     }
 
+    public MainTask getMainTaskAt(int posiiton) {
+        return mainTasks.get(posiiton);
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView circle;
         private TextView mainTaskName;
