@@ -103,10 +103,8 @@ public class SubTaskFragment extends Fragment {
                 SubTask deletedSubTask = adapter.getSubTaskAt(viewHolder.getAdapterPosition());
                 viewModel.deleteSubTask(deletedSubTask);
 
-                StringBuilder builder = new StringBuilder();
-
                 //Make undo snackbar
-                Snackbar.make(getView(), builder.append(getResources().getString(R.string.delete_subtask_message1)).append(deletedSubTask.getName()).append(getResources().getString(R.string.delete_subtask_message2)), Snackbar.LENGTH_LONG)
+                Snackbar.make(getView(), getResources().getString(R.string.delete_subtask_snackbar) + deletedSubTask.getName() + getResources().getString(R.string.delete_snackbar), Snackbar.LENGTH_LONG)
                         .setAction(getResources().getString(R.string.undo), new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {

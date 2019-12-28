@@ -26,7 +26,8 @@
     <string name="delete_maintask_message2">\"? All of its sub tasks will be deleted as well.</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
-    <string name="delete_subtask_message1">Sub task \"</string>
-    <string name="delete_subtask_message2">\" deleted</string>
+    <string name="delete_subtask_snackbar">Sub task \"</string>
+    <string name="delete_snackbar">\" deleted</string>
     <string name="undo">Undo</string>
+    <string name="delete_maintask_snackbar">Main task \"</string>
 </resources>
