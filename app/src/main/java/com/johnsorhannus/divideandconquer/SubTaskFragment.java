@@ -99,7 +99,6 @@ public class SubTaskFragment extends Fragment {
 
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
-                //TODO: Add a toast on bottom to undue
                 SubTask deletedSubTask = adapter.getSubTaskAt(viewHolder.getAdapterPosition());
                 viewModel.deleteSubTask(deletedSubTask);
 

@@ -12,6 +12,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -74,11 +75,10 @@ public class MainActivity extends AppCompatActivity {
         //Sets the "create sub task" menu option enabled or disabled based on whether an active main task exists
         //menu.findItem(R.id.action_create_subtask).setEnabled(isActiveMainTaskAvailable());
         viewModel = ViewModelProviders.of(this).get(MainTaskViewModel.class);
-        viewModel.getMainTasks().observe(this, new Observer<List<MainTask>>() {
+        viewModel.retrieveActiveMainTasks().observe(this, new Observer<List<MainTask>>() {
             @Override
             public void onChanged(@Nullable List<MainTask> mainTasks) {
-                if (mainTasks.size() == 0) {
-                    //mainTasks.size();
+                if (mainTasks.size() == 0) { //If there are no active tasks, do not allow user to add a subtask
                     menu.findItem(R.id.action_create_subtask).setEnabled(false);
                 } else {
                     menu.findItem(R.id.action_create_subtask).setEnabled(true);
