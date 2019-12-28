@@ -1,10 +1,12 @@
 package com.johnsorhannus.divideandconquer;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -16,6 +18,7 @@ import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.johnsorhannus.divideandconquer.room.AppRepository;
+import com.johnsorhannus.divideandconquer.viewmodels.SubTaskViewModel;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -27,6 +30,7 @@ public class SubTaskAdapter extends RecyclerView.Adapter<SubTaskAdapter.ViewHold
     private List<SubTask> subTasks = new ArrayList<>();
     private List<MainTask> mainTasks = new ArrayList<>();
     private Context context;
+    private SubTaskViewModel subTaskViewModel;
     //is this smart?
     //private AppRepository repository;
     //should there be an array list for main tasks here?
@@ -79,15 +83,24 @@ public class SubTaskAdapter extends RecyclerView.Adapter<SubTaskAdapter.ViewHold
             viewHolder.mainTaskName.setTextColor(context.getResources().getColor(R.color.colorAccent));
         }
 
+        //check of sub task if completed
+        if (subTask.isCompleted()) {
+            viewHolder.checkBox.setChecked(true);
+        }
+
         viewHolder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                subTaskViewModel = ViewModelProviders.of((FragmentActivity) context).get(SubTaskViewModel.class);
                 if (isChecked) {
                     subTask.setCompleted(true);
+                    subTaskViewModel.updateSubTask(subTask);
                     //notifyDataSetChanged();
                 } else {
                     subTask.setCompleted(false);
+                    subTaskViewModel.updateSubTask(subTask);
                 }
+                Log.d(TAG, "onCheckedChanged: " + subTask.getName() + " IsCompleted: " + subTask.isCompleted());
             }
         });
 
