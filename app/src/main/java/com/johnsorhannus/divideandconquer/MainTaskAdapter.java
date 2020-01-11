@@ -26,16 +26,19 @@ import static java.util.Calendar.MONTH;
 public class MainTaskAdapter extends RecyclerView.Adapter<MainTaskAdapter.ViewHolder> {
     private List<MainTask> mainTasks = new ArrayList<>();
     private Context context;
+    private OnMainTaskListener onMainTaskListener;
 
-    public MainTaskAdapter(Context context) {
+
+    public MainTaskAdapter(Context context, OnMainTaskListener onMainTaskListener) {
         this.context = context;
+        this.onMainTaskListener = onMainTaskListener;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.maintask_list_layout, parent, false);
-        return new ViewHolder(view);
+        return new ViewHolder(view, onMainTaskListener);
     }
 
     @Override
@@ -69,22 +72,35 @@ public class MainTaskAdapter extends RecyclerView.Adapter<MainTaskAdapter.ViewHo
         notifyDataSetChanged();
     }
 
-    public MainTask getMainTaskAt(int posiiton) {
-        return mainTasks.get(posiiton);
+    public MainTask getMainTaskAt(int position) {
+        return mainTasks.get(position);
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView circle;
         private TextView mainTaskName;
         private TextView dueDate;
         private TextView percentageComplete;
+        private OnMainTaskListener onMainTaskListener;
 
-        public ViewHolder(@NonNull View itemView) {
+        public ViewHolder(@NonNull View itemView, OnMainTaskListener onMainTaskListener) {
             super(itemView);
             circle = itemView.findViewById(R.id.mtFrag_circle);
             mainTaskName = itemView.findViewById(R.id.mtFrag_main_task_name);
             dueDate = itemView.findViewById(R.id.mtFrag_due_date);
             percentageComplete = itemView.findViewById(R.id.mtFrag_percentage);
+            this.onMainTaskListener = onMainTaskListener;
+
+            itemView.setOnClickListener(this);
         }
+
+        @Override
+        public void onClick(View v) {
+            onMainTaskListener.onMainTaskClick(getAdapterPosition());
+        }
+    }
+
+    public interface OnMainTaskListener {
+        void onMainTaskClick(int position);
     }
 }

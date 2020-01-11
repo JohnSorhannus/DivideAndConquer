@@ -19,6 +19,9 @@ public class MainTask extends Task {
     @ColumnInfo(name = "color")
     private int color;
 
+    @ColumnInfo(name = "percentCompleted")
+    private int percentCompleted;
+
     @Ignore
     private ArrayList<SubTask> subTasks;
 
@@ -34,6 +37,11 @@ public class MainTask extends Task {
 
     public void setColor(int newColor) {
         color = newColor;
+    }
+
+    //Required by room
+    public void setPercentCompleted(int percentCompleted) {
+        this.percentCompleted = percentCompleted;
     }
 
     public ArrayList<SubTask> sortSubTasks() {
@@ -72,8 +80,9 @@ public class MainTask extends Task {
 
     public int percentCompleted() {
         //will throw exception if numTasks is zero
-        Double percent = (numCompletedTasks() / (double) numTasks()) * 100;
-        return percent.intValue();
+        //Double percent = (numCompletedTasks() / (double) numTasks()) * 100;
+        //return percent.intValue();
+        return percentCompleted;
     }
 
     @Override

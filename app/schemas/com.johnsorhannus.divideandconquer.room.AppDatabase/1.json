@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "816cc53e5c0627fa8d737614bcc1a329",
+    "identityHash": "876ae21c1ee5f4051cf31d72e7062ea2",
     "entities": [
       {
         "tableName": "subTask",
@@ -71,11 +71,17 @@
       },
       {
         "tableName": "mainTask",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`color` INTEGER NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `dueDate` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`color` INTEGER NOT NULL, `percentCompleted` INTEGER NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `dueDate` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "color",
             "columnName": "color",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "percentCompleted",
+            "columnName": "percentCompleted",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -110,7 +116,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"816cc53e5c0627fa8d737614bcc1a329\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"876ae21c1ee5f4051cf31d72e7062ea2\")"
     ]
   }
 }

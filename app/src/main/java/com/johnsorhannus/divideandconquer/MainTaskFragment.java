@@ -17,12 +17,13 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.johnsorhannus.divideandconquer.viewmodels.MainTaskViewModel;
 
 import java.util.List;
 
-public class MainTaskFragment extends Fragment {
+public class MainTaskFragment extends Fragment implements MainTaskAdapter.OnMainTaskListener {
     private RecyclerView recyclerView;
     private MainTaskAdapter adapter;
     private MainTaskViewModel viewModel;
@@ -36,7 +37,7 @@ public class MainTaskFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         //set adapter
-        adapter = new MainTaskAdapter(getContext());
+        adapter = new MainTaskAdapter(getContext(), this);
         recyclerView.setAdapter(adapter);
 
         viewModel = ViewModelProviders.of(this).get(MainTaskViewModel.class);
@@ -46,6 +47,16 @@ public class MainTaskFragment extends Fragment {
                 adapter.setMainTasks(mainTasks);
             }
         });
+
+        //Observes any changes in sub task to update percentage completed
+        /*
+        viewModel.getSubTasks().observe(this, new Observer<List<SubTask>>() {
+            @Override
+            public void onChanged(@Nullable List<SubTask> subTasks) {
+                adapter.notifyDataSetChanged();
+            }
+        });
+        */
 
         /* DELETE FUNCTIONALITY */
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
@@ -82,5 +93,10 @@ public class MainTaskFragment extends Fragment {
         }).attachToRecyclerView(recyclerView);
 
         return rootView;
+    }
+
+    @Override
+    public void onMainTaskClick(int position) {
+        //Toast.makeText(getContext(), Integer.toString(adapter.getMainTaskAt(position).percentCompleted()), Toast.LENGTH_LONG).show();
     }
 }

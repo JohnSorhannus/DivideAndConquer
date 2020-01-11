@@ -95,7 +95,7 @@ public class SubTaskAdapter extends RecyclerView.Adapter<SubTaskAdapter.ViewHold
                 if (isChecked) {
                     subTask.setCompleted(true);
                     subTaskViewModel.updateSubTask(subTask);
-                    //notifyDataSetChanged();
+                    notifyDataSetChanged(); //if an overdue sub task has been checked, this function remove it from screen if called
                 } else {
                     subTask.setCompleted(false);
                     subTaskViewModel.updateSubTask(subTask);
