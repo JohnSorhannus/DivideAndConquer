@@ -83,9 +83,13 @@ public class SubTaskAdapter extends RecyclerView.Adapter<SubTaskAdapter.ViewHold
             viewHolder.mainTaskName.setTextColor(context.getResources().getColor(R.color.colorAccent));
         }
 
+        /* SOLVED ISSUE WITH OTHER CHECKBOXES BEING CHECKED -- PROBLEM WAS CIRCULAR CALLS. https://stackoverflow.com/questions/27070220/android-recyclerview-notifydatasetchanged-illegalstateexception/37305564#37305564  */
+        viewHolder.checkBox.setOnCheckedChangeListener(null);
         //check of sub task if completed
         if (subTask.isCompleted()) {
             viewHolder.checkBox.setChecked(true);
+        } else {
+            viewHolder.checkBox.setChecked(false);
         }
 
         viewHolder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -95,7 +99,7 @@ public class SubTaskAdapter extends RecyclerView.Adapter<SubTaskAdapter.ViewHold
                 if (isChecked) {
                     subTask.setCompleted(true);
                     subTaskViewModel.updateSubTask(subTask);
-                    notifyDataSetChanged(); //if an overdue sub task has been checked, this function remove it from screen if called
+                    //notifyDataSetChanged(); //if an overdue sub task has been checked, this function remove it from screen if called -- TEST THIS. COMMENTING OUT THIS FUNCTION ANIMATES BOX WHILE BEING CHECKED.
                 } else {
                     subTask.setCompleted(false);
                     subTaskViewModel.updateSubTask(subTask);
