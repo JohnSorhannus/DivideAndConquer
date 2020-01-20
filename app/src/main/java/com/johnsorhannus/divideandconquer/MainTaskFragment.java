@@ -44,7 +44,7 @@ public class MainTaskFragment extends Fragment implements MainTaskAdapter.OnMain
         viewModel.getMainTasks().observe(this, new Observer<List<MainTask>>() {
             @Override
             public void onChanged(@Nullable List<MainTask> mainTasks) {
-                adapter.setMainTasks(mainTasks);
+                adapter.submitList(mainTasks);
             }
         });
 

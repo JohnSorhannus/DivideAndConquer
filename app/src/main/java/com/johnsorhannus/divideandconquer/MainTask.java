@@ -78,7 +78,7 @@ public class MainTask extends Task {
         return numCompTasks;
     }
 
-    public int percentCompleted() {
+    public int getPercentCompleted() {
         //will throw exception if numTasks is zero
         //Double percent = (numCompletedTasks() / (double) numTasks()) * 100;
         //return percent.intValue();
@@ -87,7 +87,7 @@ public class MainTask extends Task {
 
     @Override
     public boolean isCompleted() {
-        return (percentCompleted() == 100);
+        return (getPercentCompleted() == 100);
     }
 
     @Override
@@ -97,7 +97,7 @@ public class MainTask extends Task {
         builder.append("MainTask[");
         builder.append(super.toString());
         builder.append(", color = " + color);
-        builder.append(", percent completed = " + percentCompleted() + "%]");
+        builder.append(", percent completed = " + getPercentCompleted() + "%]");
 
         if (numTasks() != 0) {
             builder.append('\n');

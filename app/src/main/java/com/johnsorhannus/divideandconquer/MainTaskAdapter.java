@@ -5,6 +5,8 @@ import android.content.Context;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
 import android.support.annotation.NonNull;
+import android.support.v7.recyclerview.extensions.ListAdapter;
+import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.CollapsibleActionView;
@@ -23,16 +25,32 @@ import static android.support.constraint.Constraints.TAG;
 import static java.util.Calendar.MONTH;
 
 
-public class MainTaskAdapter extends RecyclerView.Adapter<MainTaskAdapter.ViewHolder> {
-    private List<MainTask> mainTasks = new ArrayList<>();
+public class MainTaskAdapter extends ListAdapter<MainTask, MainTaskAdapter.ViewHolder> {
+    //private List<MainTask> mainTasks = new ArrayList<>();
     private Context context;
     private OnMainTaskListener onMainTaskListener;
 
 
     public MainTaskAdapter(Context context, OnMainTaskListener onMainTaskListener) {
+        super(DIFF_CALLBACK);
         this.context = context;
         this.onMainTaskListener = onMainTaskListener;
     }
+
+    private static final DiffUtil.ItemCallback<MainTask> DIFF_CALLBACK = new DiffUtil.ItemCallback<MainTask>() {
+        @Override
+        public boolean areItemsTheSame(@NonNull MainTask oldTask, @NonNull MainTask newTask) {
+            return oldTask.getId() == newTask.getId();
+        }
+
+        @Override
+        public boolean areContentsTheSame(@NonNull MainTask oldTask, @NonNull MainTask newTask) {
+            return oldTask.getName().equals(newTask.getName()) &&
+                    oldTask.getDueDate().equals(newTask.getDueDate()) &&
+                    oldTask.getColor() == newTask.getColor() &&
+                    oldTask.getPercentCompleted() == newTask.getPercentCompleted();
+        }
+    };
 
     @NonNull
     @Override
@@ -43,9 +61,7 @@ public class MainTaskAdapter extends RecyclerView.Adapter<MainTaskAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder parent, int i) {
-
-
-        MainTask mainTask = mainTasks.get(i);
+        MainTask mainTask = getItem(i);
 
         //Map<String, Integer> dateDisplayNames = mainTask.getDueDate().getDisplayNames(Calendar.MONTH, Calendar.LONG, Locale.US);
         //dateDisplayNames.
@@ -53,7 +69,7 @@ public class MainTaskAdapter extends RecyclerView.Adapter<MainTaskAdapter.ViewHo
         ShapeDrawable drawable = new ShapeDrawable(new OvalShape());
         drawable.getPaint().setColor(mainTask.getColor() + 0xFF000000);
         parent.circle.setBackground(drawable);
-        parent.percentageComplete.setText(context.getResources().getString(R.string.percent, mainTask.percentCompleted()));
+        parent.percentageComplete.setText(context.getResources().getString(R.string.percent, mainTask.getPercentCompleted()));
         Calendar dueDate = mainTask.getDueDate();
         //String day_str = dueDate.getDisplayName(Calendar.DAY_OF_MONTH, Calendar.LONG, Locale.getDefault());
         //int day = Integer.parseInt()
@@ -61,6 +77,7 @@ public class MainTaskAdapter extends RecyclerView.Adapter<MainTaskAdapter.ViewHo
         parent.dueDate.setText(context.getResources().getString(R.string.due_date, dueDate.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault()), dueDate.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault()), dueDate.get(Calendar.DAY_OF_MONTH), dueDate.get(Calendar.YEAR)));
     }
 
+    /*
     @Override
     public int getItemCount() {
         return mainTasks.size();
@@ -71,9 +88,10 @@ public class MainTaskAdapter extends RecyclerView.Adapter<MainTaskAdapter.ViewHo
 
         notifyDataSetChanged();
     }
+    */
 
     public MainTask getMainTaskAt(int position) {
-        return mainTasks.get(position);
+        return getItem(position);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
