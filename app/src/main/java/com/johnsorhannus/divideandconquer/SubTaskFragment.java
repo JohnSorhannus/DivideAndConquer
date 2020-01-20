@@ -57,18 +57,20 @@ public class SubTaskFragment extends Fragment {
         //repository = new AppRepository(getContext());
         viewModel = ViewModelProviders.of(this).get(SubTaskViewModel.class);
         //viewModel.init(getContext());
-        viewModel.getSubTasks().observe(this, new Observer<List<SubTask>>() {
+        viewModel.getSubTasks().observe(getViewLifecycleOwner(), new Observer<List<SubTask>>() {
             @Override
             public void onChanged(@Nullable List<SubTask> subTasks) {
                 //Update RecyclerView
-                adapter.setSubTasks(subTasks);
-                Log.d(TAG, "onChanged: " + subTasks.size());
-                Toast.makeText(getContext(), "hiuhih", Toast.LENGTH_SHORT).show();
-                Log.d(TAG, "onChanged: CALLED");
+                Log.d(TAG, "onChanged: subTasks length = " + subTasks.size());
+                adapter.submitList(subTasks);
+                //Log.d(TAG, "onChanged: " + subTasks.size());
+                //Toast.makeText(getContext(), "hiuhih", Toast.LENGTH_SHORT).show();
+                //Log.d(TAG, "onChanged: CALLED");
             }
         });
 
-        viewModel.getMainTasks().observe(this, new Observer<List<MainTask>>() {
+
+        viewModel.getMainTasks().observe(getViewLifecycleOwner(), new Observer<List<MainTask>>() {
             @Override
             public void onChanged(@Nullable List<MainTask> mainTasks) {
                 //Update RecyclerView
@@ -101,6 +103,7 @@ public class SubTaskFragment extends Fragment {
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
                 SubTask deletedSubTask = adapter.getSubTaskAt(viewHolder.getAdapterPosition());
                 viewModel.deleteSubTask(deletedSubTask);
+                //adapter.notifyItemRemoved(viewHolder.getAdapterPosition());
 
                 //Make undo snackbar
                 Snackbar.make(getView(), getResources().getString(R.string.delete_subtask_snackbar) + deletedSubTask.getName() + getResources().getString(R.string.delete_snackbar), Snackbar.LENGTH_LONG)
@@ -108,7 +111,8 @@ public class SubTaskFragment extends Fragment {
                             @Override
                             public void onClick(View v) {
                                 viewModel.insertSubTask(deletedSubTask);
-                                adapter.notifyDataSetChanged();
+                                //adapter.notifyDataSetChanged();
+                                //adapter.notifyItemInserted(viewHolder.getAdapterPosition()); -- CAUSES CRASH
                             }
                         }).show();
             }

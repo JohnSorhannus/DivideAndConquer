@@ -7,6 +7,7 @@ import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.johnsorhannus.divideandconquer.MainTask;
 import com.johnsorhannus.divideandconquer.SubTask;
@@ -14,10 +15,14 @@ import com.johnsorhannus.divideandconquer.room.AppRepository;
 
 import java.util.List;
 
+import static android.content.ContentValues.TAG;
+
 public class SubTaskViewModel extends AndroidViewModel {
     private AppRepository repository;
     private LiveData<List<SubTask>> subTasks;
     private LiveData<List<MainTask>> mainTasks;
+
+    private static final String TAG = "SubTaskViewModel";
 
     public SubTaskViewModel(@NonNull Application application) {
         super(application);
@@ -37,6 +42,7 @@ public class SubTaskViewModel extends AndroidViewModel {
 
     public void updateSubTask(SubTask subTask) {
         repository.updateSubTask(subTask);
+        Log.d(TAG, "updateSubTask: CALLED for " + subTask.getName() + " isCompleted = " + subTask.isCompleted() + " isOverdue = " + subTask.isOverdue());
     }
 
     public void updateMainTask(MainTask mainTask) {

@@ -7,4 +7,5 @@
     <color name="dark_gray">#757575</color>
     <color name="green">#2E7D32</color>
     <color name="red">#B00020</color>
+    <color name="main_task_text_color">#808080</color>
 </resources>
