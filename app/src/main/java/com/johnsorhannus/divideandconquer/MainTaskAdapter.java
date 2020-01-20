@@ -114,11 +114,14 @@ public class MainTaskAdapter extends ListAdapter<MainTask, MainTaskAdapter.ViewH
 
         @Override
         public void onClick(View v) {
-            onMainTaskListener.onMainTaskClick(getAdapterPosition());
+            int position = getAdapterPosition();
+            if (onMainTaskListener != null && position != RecyclerView.NO_POSITION) {
+                onMainTaskListener.onMainTaskClick(getItem(position));
+            }
         }
     }
 
     public interface OnMainTaskListener {
-        void onMainTaskClick(int position);
+        void onMainTaskClick(MainTask mainTask);
     }
 }

@@ -59,6 +59,7 @@ public class SubTaskAdapter extends ListAdapter<SubTask, SubTaskAdapter.ViewHold
             return contentsSame;
         }
 
+        //prevents animation when checking checkbox
         @Nullable
         @Override
         public Object getChangePayload(@NonNull SubTask oldTask, @NonNull SubTask newTask) {

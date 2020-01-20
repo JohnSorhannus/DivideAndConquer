@@ -5,6 +5,7 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -96,7 +97,10 @@ public class MainTaskFragment extends Fragment implements MainTaskAdapter.OnMain
     }
 
     @Override
-    public void onMainTaskClick(int position) {
+    public void onMainTaskClick(MainTask mainTask) {
         //Toast.makeText(getContext(), Integer.toString(adapter.getMainTaskAt(position).percentCompleted()), Toast.LENGTH_LONG).show();
+        Intent intent = new Intent(getActivity(), ViewSubTasksForMainTaskActivity.class);
+        intent.putExtra("Name", mainTask.getName());
+        startActivity(intent);
     }
 }
