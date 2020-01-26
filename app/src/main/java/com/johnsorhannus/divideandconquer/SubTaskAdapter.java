@@ -41,7 +41,8 @@ public class SubTaskAdapter extends ListAdapter<SubTask, SubTaskAdapter.ViewHold
         this.context = context;
     }
 
-    private static final DiffUtil.ItemCallback<SubTask> DIFF_CALLBACK = new DiffUtil.ItemCallback<SubTask>() {
+    private static final DiffUtil.ItemCallback<SubTask> DIFF_CALLBACK = SubTaskDiffCallback.getSubTaskDiffCallback();
+            /*new DiffUtil.ItemCallback<SubTask>() {
         @Override
         public boolean areItemsTheSame(@NonNull SubTask oldTask, @NonNull SubTask newTask) {
             Log.d(TAG, "areItemsTheSame: oldTask name: " + oldTask.getName() + " id: " + oldTask.getId() + " ### newTask name: " + newTask.getName() + " id: " + newTask.getId());
@@ -71,7 +72,7 @@ public class SubTaskAdapter extends ListAdapter<SubTask, SubTaskAdapter.ViewHold
 
             //return Boolean.FALSE;
         }
-    };
+    };*/
     //is this smart?
     //private AppRepository repository;
     //should there be an array list for main tasks here?

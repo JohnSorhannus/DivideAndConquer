@@ -13,7 +13,7 @@
         android:padding="8dp">
 
         <CheckBox
-            android:id="@+id/stFrag_checkBox"
+            android:id="@+id/vmtCard_checkBox"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_alignParentEnd="true"
@@ -22,20 +22,20 @@
             android:layout_centerVertical="true"/>
 
         <TextView
-            android:id="@+id/stFrag_sub_task_name"
+            android:id="@+id/vmtCard_sub_task_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Sub Task Name"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:layout_toStartOf="@+id/stFrag_checkBox"
+            android:layout_toStartOf="@+id/vmtCard_checkBox"
             android:layout_alignParentStart="true"/>
 
         <TextView
-            android:id="@+id/stFrag_main_task_name"
+            android:id="@+id/vmtCard_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Date"
-            android:layout_below="@+id/stFrag_sub_task_name"/>
+            android:layout_below="@+id/vmtCard_sub_task_name"/>
 
     </RelativeLayout>
 
