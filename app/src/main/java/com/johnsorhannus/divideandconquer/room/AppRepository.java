@@ -76,6 +76,10 @@ public class AppRepository {
 
     }
 
+    public LiveData<List<SubTask>> retrieveSubTasksForMainTask(final int mainTaskId) {
+        return database.getSubTaskDao().getSubTasksForMainTask(mainTaskId);
+    }
+
     /*public LiveData<MainTask> retrieveMainTask(final int subTaskId) {
         return database.getSubTaskMainTaskJunctionDao().getMainTask(subTaskId);
     }*/
@@ -99,6 +103,7 @@ public class AppRepository {
     public LiveData<List<MainTask>> retrieveAllMainTasks() {
         return database.getMainTaskDao().getAllMainTasks();
     }
+
 
     //testing -- problem -- can't be int, has to be LiveData
     public int retrieveNumSubTasks() {

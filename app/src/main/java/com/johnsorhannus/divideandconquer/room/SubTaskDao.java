@@ -25,6 +25,9 @@ public interface SubTaskDao {
     @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)
     LiveData<List<SubTask>> getSubTasksForSTFragment(final long currentDateMillis, final long yesterdayMillis);
 
+    @Query("SELECT subTask.id, subTask.name, subTask.dueDate, subTask.completed, subTask.mainTaskId FROM subTask WHERE subTask.mainTaskId = :mainTaskId ORDER BY subTask.dueDate ASC")
+    LiveData<List<SubTask>> getSubTasksForMainTask(final int mainTaskId);
+
     //testing
     @Query("SELECT count(*) FROM subTask")
     int getNumberOfSubTasks();
