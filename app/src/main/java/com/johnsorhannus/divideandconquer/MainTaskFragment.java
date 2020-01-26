@@ -100,7 +100,8 @@ public class MainTaskFragment extends Fragment implements MainTaskAdapter.OnMain
     public void onMainTaskClick(MainTask mainTask) {
         //Toast.makeText(getContext(), Integer.toString(adapter.getMainTaskAt(position).percentCompleted()), Toast.LENGTH_LONG).show();
         Intent intent = new Intent(getActivity(), ViewSubTasksForMainTaskActivity.class);
-        intent.putExtra("Name", mainTask.getName());
+        //intent.putExtra("mainTask", mainTask);
+        intent.putExtra("mainTask", mainTask);
         startActivity(intent);
     }
 }

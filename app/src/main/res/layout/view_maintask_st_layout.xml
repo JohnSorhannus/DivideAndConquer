@@ -34,7 +34,7 @@
             android:id="@+id/stFrag_main_task_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Main Task Name"
+            android:text="Date"
             android:layout_below="@+id/stFrag_sub_task_name"/>
 
     </RelativeLayout>

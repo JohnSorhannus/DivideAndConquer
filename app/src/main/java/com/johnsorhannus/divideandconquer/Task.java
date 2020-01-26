@@ -6,10 +6,11 @@ import android.arch.persistence.room.PrimaryKey;
 import android.arch.persistence.room.TypeConverters;
 import android.support.annotation.NonNull;
 
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.util.Calendar;
 
-public abstract class Task {
+public abstract class Task implements Serializable {
 
     @PrimaryKey(autoGenerate = true)
     private int id;

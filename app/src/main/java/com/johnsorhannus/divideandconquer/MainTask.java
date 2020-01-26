@@ -6,6 +6,7 @@ import android.arch.persistence.room.Ignore;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -13,7 +14,8 @@ import java.util.Collections;
 import static android.support.constraint.Constraints.TAG;
 
 @Entity(tableName = "mainTask")
-public class MainTask extends Task {
+@SuppressWarnings("serial") //With this annotation we are going to hide compiler warnings
+public class MainTask extends Task implements Serializable { //Serializable implemented in order to allow a main task to be passed when making an intent
 
     @NonNull
     @ColumnInfo(name = "color")
