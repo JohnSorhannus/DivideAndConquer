@@ -43,6 +43,9 @@ public interface MainTaskDao {
     @Query("SELECT * FROM mainTask WHERE dueDate = (SELECT MAX(dueDate) FROM mainTask);")
     LiveData<MainTask> getLatestDueDate(); //maybe * would work instead
 
+    @Query("SELECT mainTask.id, mainTask.name, mainTask.dueDate, mainTask.color, 0 AS percentCompleted FROM mainTask WHERE mainTask.id = :mainTaskId")
+    LiveData<MainTask> getMainTask(final int mainTaskId);
+
     @Delete
     void delete(MainTask mainTask);
 

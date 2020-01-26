@@ -5,6 +5,8 @@ import android.graphics.drawable.shapes.OvalShape;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -13,12 +15,19 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.johnsorhannus.divideandconquer.viewmodels.ViewSubTasksForMainTaskViewModel;
+
 import java.util.Calendar;
 import java.util.Locale;
 
 import static android.support.constraint.Constraints.TAG;
 
 public class ViewSubTasksForMainTaskActivity extends AppCompatActivity {
+    //Backend components
+    private RecyclerView recyclerView;
+    private ViewSubTasksForMainTaskViewModel viewModel;
+    //add adapter
+
 
     //XML Components
     TextView textViewMainTaskName;
@@ -38,11 +47,17 @@ public class ViewSubTasksForMainTaskActivity extends AppCompatActivity {
         //Set title of toolbar
         setTitle(R.string.view_maintask);
 
-        //Get XML Components
-        textViewMainTaskName = findViewById(R.id.vmtFrag_main_task_name);
-        textViewDueDate = findViewById(R.id.vmtFrag_due_date);
-        circle = findViewById(R.id.vmtFrag_circle);
+        //Set Recycler View
+        recyclerView = findViewById(R.id.vmt_recycler_view);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setHasFixedSize(true);
 
+        //Set adapter
+
+        //Get XML Components
+        textViewMainTaskName = findViewById(R.id.vmt_main_task_name);
+        textViewDueDate = findViewById(R.id.vmt_due_date);
+        circle = findViewById(R.id.vmt_circle);
 
         //Set XML Components
         textViewMainTaskName.setText(mainTask.getName());

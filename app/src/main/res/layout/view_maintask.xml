@@ -41,14 +41,14 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/vmtFrag_circle"
+                    android:id="@+id/vmt_circle"
                     android:layout_width="16dp"
                     android:layout_height="16dp"
                     android:layout_marginEnd="6dp"
                     android:layout_gravity="center_vertical"/>
 
                 <TextView
-                    android:id="@+id/vmtFrag_main_task_name"
+                    android:id="@+id/vmt_main_task_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Main Task Name"
@@ -57,7 +57,7 @@
             </LinearLayout>
 
             <TextView
-                android:id="@+id/vmtFrag_due_date"
+                android:id="@+id/vmt_due_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
@@ -74,7 +74,7 @@
             android:layout_centerVertical="true">
 
             <TextView
-                android:id="@+id/vmtFrag_percentage"
+                android:id="@+id/vmt_percentage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/percent"
@@ -83,7 +83,7 @@
                 android:layout_gravity="center_horizontal"/>
 
             <TextView
-                android:id="@+id/vmtFrag_completed"
+                android:id="@+id/vmt_completed"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/completed"
@@ -102,7 +102,7 @@
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/sub_task_recycler_view"
+        android:id="@+id/vmt_recycler_view"
         tools:listitem="@layout/view_maintask_st_layout">
 
     </android.support.v7.widget.RecyclerView>

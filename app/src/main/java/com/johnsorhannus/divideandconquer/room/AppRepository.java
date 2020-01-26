@@ -104,6 +104,10 @@ public class AppRepository {
         return database.getMainTaskDao().getAllMainTasks();
     }
 
+    public LiveData<MainTask> retrieveMainTask(final int mainTaskId) {
+        return database.getMainTaskDao().getMainTask(mainTaskId);
+    }
+
 
     //testing -- problem -- can't be int, has to be LiveData
     public int retrieveNumSubTasks() {
