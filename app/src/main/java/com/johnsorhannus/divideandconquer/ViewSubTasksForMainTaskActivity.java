@@ -1,5 +1,8 @@
 package com.johnsorhannus.divideandconquer;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProvider;
+import android.arch.lifecycle.ViewModelProviders;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
 import android.os.Bundle;
@@ -15,9 +18,11 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.johnsorhannus.divideandconquer.viewmodels.ViewSubTasksForMainTaskVMFactory;
 import com.johnsorhannus.divideandconquer.viewmodels.ViewSubTasksForMainTaskViewModel;
 
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 import static android.support.constraint.Constraints.TAG;
@@ -26,8 +31,7 @@ public class ViewSubTasksForMainTaskActivity extends AppCompatActivity {
     //Backend components
     private RecyclerView recyclerView;
     private ViewSubTasksForMainTaskViewModel viewModel;
-    //add adapter
-
+    private ViewSubTasksForMainTaskAdapter adapter;
 
     //XML Components
     TextView textViewMainTaskName;
@@ -53,6 +57,8 @@ public class ViewSubTasksForMainTaskActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
 
         //Set adapter
+        adapter = new ViewSubTasksForMainTaskAdapter(this);
+        recyclerView.setAdapter(adapter);
 
         //Get XML Components
         textViewMainTaskName = findViewById(R.id.vmt_main_task_name);
@@ -70,6 +76,21 @@ public class ViewSubTasksForMainTaskActivity extends AppCompatActivity {
         drawable.getPaint().setColor(mainTask.getColor() + 0xFF000000);
         circle.setBackground(drawable);
 
+        viewModel = ViewModelProviders.of(this, new ViewSubTasksForMainTaskVMFactory(this.getApplication(), mainTask.getId())).get(ViewSubTasksForMainTaskViewModel.class);
+        //Observe LiveData
+        viewModel.getSubTasks().observe(this, new Observer<List<SubTask>>() {
+            @Override
+            public void onChanged(@Nullable List<SubTask> subTasks) {
+                adapter.submitList(subTasks);
+            }
+        });
+
+        viewModel.getMainTask().observe(this, new Observer<MainTask>() {
+            @Override
+            public void onChanged(@Nullable MainTask mainTask) {
+                //adapter.set
+            }
+        });
     }
 
     //Creates 'X' on toolbar
