@@ -118,6 +118,10 @@ public class ViewSubTasksForMainTaskAdapter extends ListAdapter<SubTask, ViewSub
         this.mainTask = mainTask;
     }
 
+    public SubTask getSubTaskAt(int position) {
+        return getItem(position);
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView subTaskName;
         TextView dueDate;

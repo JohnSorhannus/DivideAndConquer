@@ -103,16 +103,11 @@ public class SubTaskFragment extends Fragment {
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
                 SubTask deletedSubTask = adapter.getSubTaskAt(viewHolder.getAdapterPosition());
                 viewModel.deleteSubTask(deletedSubTask);
-                //adapter.notifyItemRemoved(viewHolder.getAdapterPosition());
-
-                //Make undo snackbar
                 Snackbar.make(getView(), getResources().getString(R.string.delete_subtask_snackbar) + deletedSubTask.getName() + getResources().getString(R.string.delete_snackbar), Snackbar.LENGTH_LONG)
                         .setAction(getResources().getString(R.string.undo), new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 viewModel.insertSubTask(deletedSubTask);
-                                //adapter.notifyDataSetChanged();
-                                //adapter.notifyItemInserted(viewHolder.getAdapterPosition()); -- CAUSES CRASH
                             }
                         }).show();
             }

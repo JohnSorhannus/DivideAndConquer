@@ -5,6 +5,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/view_maintask_linlayout"
     tools:context=".ViewSubTasksForMainTaskActivity">
 
     <android.support.design.widget.AppBarLayout

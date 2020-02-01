@@ -6,15 +6,19 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -96,6 +100,26 @@ public class ViewSubTasksForMainTaskActivity extends AppCompatActivity {
                 //percentageCompleted.setText(getResources().getString(R.string.percent, mainTask.getPercentCompleted()));
             }
         });
+
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder viewHolder1) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
+                SubTask deletedSubTask = adapter.getSubTaskAt(viewHolder.getAdapterPosition());
+                viewModel.deleteSubTask(deletedSubTask);
+                Snackbar.make(findViewById(R.id.view_maintask_linlayout), getResources().getString(R.string.delete_subtask_snackbar) + deletedSubTask.getName() + getResources().getString(R.string.delete_snackbar), Snackbar.LENGTH_LONG)
+                        .setAction(getResources().getString(R.string.undo), new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                viewModel.insertSubTask(deletedSubTask);
+                            }
+                        }).show();
+            }
+        }).attachToRecyclerView(recyclerView);
     }
 
     //Creates 'X' on toolbar
