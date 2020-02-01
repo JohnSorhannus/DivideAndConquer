@@ -61,15 +61,6 @@ public class ViewSubTasksForMainTaskAdapter extends ListAdapter<SubTask, ViewSub
         viewHolder.dueDate.setText(context.getResources().getString(R.string.due_date, dueDate.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault()), dueDate.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault()), dueDate.get(Calendar.DAY_OF_MONTH), dueDate.get(Calendar.YEAR)));
 
         Log.d(TAG, "onBindViewHolder: " + subTask.getName() + " isOverdue = " + subTask.isOverdue());
-        if (subTask.isOverdue()) {
-            viewHolder.card.setCardBackgroundColor(context.getColor(R.color.red));
-            viewHolder.subTaskName.setTextColor(context.getColor(R.color.colorAccent));
-            viewHolder.dueDate.setTextColor(context.getColor(R.color.colorAccent));
-        } else {
-            viewHolder.card.setCardBackgroundColor(context.getResources().getColor(R.color.colorAccent));
-            viewHolder.subTaskName.setTextAppearance(R.style.TextAppearance_AppCompat_Large);
-            viewHolder.dueDate.setTextColor(context.getColor(R.color.main_task_text_color));
-        }
 
         /* SOLVED ISSUE WITH OTHER CHECKBOXES BEING CHECKED -- PROBLEM WAS CIRCULAR CALLS. https://stackoverflow.com/questions/27070220/android-recyclerview-notifydatasetchanged-illegalstateexception/37305564#37305564  */
         viewHolder.checkBox.setOnCheckedChangeListener(null);
@@ -84,29 +75,40 @@ public class ViewSubTasksForMainTaskAdapter extends ListAdapter<SubTask, ViewSub
             Log.d(TAG, "onBindViewHolder: " + subTask.getName() + " set to unchecked");
         }
 
+        if (subTask.isOverdue()) {
+            viewHolder.card.setCardBackgroundColor(context.getColor(R.color.red));
+            viewHolder.subTaskName.setTextColor(context.getColor(R.color.colorAccent));
+            viewHolder.dueDate.setTextColor(context.getColor(R.color.colorAccent));
+        } else {
+            viewHolder.card.setCardBackgroundColor(context.getResources().getColor(R.color.colorAccent));
+            viewHolder.subTaskName.setTextAppearance(R.style.TextAppearance_AppCompat_Large);
+            viewHolder.dueDate.setTextColor(context.getColor(R.color.main_task_text_color));
+        }
+
         viewHolder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 Log.d(TAG, "onCheckedChanged: called for subTask " + subTask.getName() + " isChecked = " + isChecked);
                 viewModel = ViewModelProviders.of((FragmentActivity) context).get(ViewSubTasksForMainTaskViewModel.class);
                 if (isChecked) {
+                    //if overdue, change card to white
+                    if (subTask.isOverdue()) {
+                        viewHolder.card.setCardBackgroundColor(context.getResources().getColor(R.color.colorAccent));
+                        viewHolder.subTaskName.setTextAppearance(R.style.TextAppearance_AppCompat_Large);
+                        viewHolder.dueDate.setTextColor(context.getColor(R.color.main_task_text_color));
+                    }
                     subTask.setCompleted(true);
                     viewModel.updateSubTask(subTask);
-                    if (subTask.isOverdue()) {
-                        //notifyItemRemoved(i);
-                    } else {
-                        //notifyItemChanged(viewHolder.getAdapterPosition(), false);
-                    }
-                    //notifyItemChanged(i);
-                    //notifyDataSetChanged(); //if an overdue sub task has been checked, this function remove it from screen if called -- TEST THIS. COMMENTING OUT THIS FUNCTION ANIMATES BOX WHILE BEING CHECKED.
                 } else {
                     subTask.setCompleted(false);
+                    //if overdue, set color back to red
+                    if (subTask.isOverdue()) {
+                        viewHolder.card.setCardBackgroundColor(context.getResources().getColor(R.color.colorAccent));
+                        viewHolder.subTaskName.setTextAppearance(R.style.TextAppearance_AppCompat_Large);
+                        viewHolder.dueDate.setTextColor(context.getColor(R.color.main_task_text_color));
+                    }
                     viewModel.updateSubTask(subTask);
-                    //notifyItemChanged(viewHolder.getAdapterPosition(), false);
                 }
-                //notifyItemChanged(i);
-                //notifyItemChanged();
-                //Log.d(TAG, "onCheckedChanged: " + subTask.getName() + " IsCompleted: " + subTask.isCompleted());
             }
         });
 

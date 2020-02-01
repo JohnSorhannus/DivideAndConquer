@@ -42,46 +42,7 @@ public class SubTaskAdapter extends ListAdapter<SubTask, SubTaskAdapter.ViewHold
     }
 
     private static final DiffUtil.ItemCallback<SubTask> DIFF_CALLBACK = SubTaskDiffCallback.getSubTaskDiffCallback();
-            /*new DiffUtil.ItemCallback<SubTask>() {
-        @Override
-        public boolean areItemsTheSame(@NonNull SubTask oldTask, @NonNull SubTask newTask) {
-            Log.d(TAG, "areItemsTheSame: oldTask name: " + oldTask.getName() + " id: " + oldTask.getId() + " ### newTask name: " + newTask.getName() + " id: " + newTask.getId());
-            return oldTask.getId() == newTask.getId();
-        }
-
-        @Override
-        public boolean areContentsTheSame(@NonNull SubTask oldTask, @NonNull SubTask newTask) {
-            Log.d(TAG, "areContentsTheSame: oldTask name: " + oldTask.getName() + " ### newTask name: " + newTask.getName());
-            boolean contentsSame = oldTask.getName().equals(newTask.getName()) &&
-                    oldTask.getDueDate().equals(newTask.getDueDate()) &&
-                    oldTask.isCompleted() == newTask.isCompleted() &&
-                    oldTask.getMainTaskId() == (newTask.getMainTaskId());
-            Log.d(TAG, "areContentsTheSame: = " + contentsSame);
-            return contentsSame;
-        }
-
-        //prevents animation when checking checkbox
-        @Nullable
-        @Override
-        public Object getChangePayload(@NonNull SubTask oldTask, @NonNull SubTask newTask) {
-            if (oldTask.isCompleted() != newTask.isCompleted()) {
-                return Boolean.FALSE;
-            } else {
-                return null;
-            }
-
-            //return Boolean.FALSE;
-        }
-    };*/
-    //is this smart?
-    //private AppRepository repository;
-    //should there be an array list for main tasks here?
-
-    /*public SubTaskAdapter(ArrayList<SubTask> subTasks, AppRepository repository) {
-        this.subTasks = subTasks;
-        this.repository = repository;
-    }*/
-
+    
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
@@ -89,33 +50,8 @@ public class SubTaskAdapter extends ListAdapter<SubTask, SubTaskAdapter.ViewHold
         return new ViewHolder(view);
     }
 
-    /*
-    @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position, @NonNull List<Object> payloads) {
-        if (payloads.isEmpty()) {
-            super.onBindViewHolder(holder, position, payloads);
-        } else {
-            onBindViewHolder(holder, position);
-        }
-    }
-    */
-
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        //Log.d(TAG, "onBindViewHolder: called. " + i);
-
-        //testing --- if block = new code
-        /*try {
-            MainTask mainTask = repository.retrieveMainTask(subTasks.get(i).getId()).getValue();
-            viewHolder.subTaskName.setText(subTasks.get(i).getName());
-            viewHolder.mainTaskName.setText(mainTask.getName());
-            ShapeDrawable drawable = new ShapeDrawable(new OvalShape());
-            drawable.getPaint().setColor(mainTask.getColor() + 0xFF000000); //FIRST TWO DIGITS MUST BE FF for alpha (fully opaque)
-            viewHolder.circle.setBackground(drawable);
-        } catch (NullPointerException e) {
-            Log.d(TAG, "onBindViewHolder: Null pointer " + e.getMessage());
-        }*/
-
         SubTask subTask = getItem(i);
         MainTask mainTask = findMainTask(subTask);
         Log.d(TAG, "onBindViewHolder: " + mainTask.getName() + " " + mainTask.isOverdue());
@@ -158,63 +94,19 @@ public class SubTaskAdapter extends ListAdapter<SubTask, SubTaskAdapter.ViewHold
                 if (isChecked) {
                     subTask.setCompleted(true);
                     subTaskViewModel.updateSubTask(subTask);
-                    if (subTask.isOverdue()) {
-                        //notifyItemRemoved(i);
-                    } else {
-                        //notifyItemChanged(viewHolder.getAdapterPosition(), false);
-                    }
-                    //notifyItemChanged(i);
-                    //notifyDataSetChanged(); //if an overdue sub task has been checked, this function remove it from screen if called -- TEST THIS. COMMENTING OUT THIS FUNCTION ANIMATES BOX WHILE BEING CHECKED.
                 } else {
                     subTask.setCompleted(false);
                     subTaskViewModel.updateSubTask(subTask);
-                    //notifyItemChanged(viewHolder.getAdapterPosition(), false);
                 }
-                //notifyItemChanged(i);
-                //notifyItemChanged();
-                //Log.d(TAG, "onCheckedChanged: " + subTask.getName() + " IsCompleted: " + subTask.isCompleted());
             }
         });
 
-        /* if (viewHolder.checkBox.isChecked()) {
-            subTask.setCompleted(true);
-        } else {
-            subTask.setCompleted(false);
-        }*/
-
-        /*Iterator<MainTask> iterator = mainTasks.iterator();
-        while (iterator.hasNext()) {
-            MainTask mainTask = iterator.next();
-            if (mainTask.getId() == subTasks.get(i).getMainTaskId()) {
-                viewHolder.mainTaskName.setText(mainTask.getName());
-            }
-        }*/
-        
 
     }
-
-    /*
-    @Override
-    public int getItemCount() {
-        return subTasks.size();
-    }
-    */
-
-    /*
-    public void setSubTasks(List<SubTask> subTasks) {
-        this.subTasks = subTasks;
-
-        //change later
-        notifyDataSetChanged();
-    }
-    */
 
     //WHEN REMOVING MAIN TASK OBSERVE
     public void setMainTasks(List<MainTask> mainTasks) {
         this.mainTasks = mainTasks;
-
-        //change later
-        //notifyDataSetChanged();
     }
 
     private MainTask findMainTask(SubTask subTask) {
