@@ -132,7 +132,7 @@ public class SubTaskAdapter extends ListAdapter<SubTask, SubTaskAdapter.ViewHold
             viewHolder.subTaskName.setTextColor(context.getColor(R.color.colorAccent));
             viewHolder.mainTaskName.setTextColor(context.getColor(R.color.colorAccent));
         } else {
-            viewHolder.card.setCardBackgroundColor(context.getResources().getColor(R.color.colorAccent));
+            viewHolder.card.setCardBackgroundColor(context.getColor(R.color.colorAccent));
             viewHolder.subTaskName.setTextAppearance(R.style.TextAppearance_AppCompat_Large);
             viewHolder.mainTaskName.setTextColor(context.getColor(R.color.main_task_text_color));
         }

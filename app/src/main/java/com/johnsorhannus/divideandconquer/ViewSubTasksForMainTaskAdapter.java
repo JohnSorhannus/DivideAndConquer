@@ -31,6 +31,7 @@ public class ViewSubTasksForMainTaskAdapter extends ListAdapter<SubTask, ViewSub
 
     private Context context;
     private ViewSubTasksForMainTaskViewModel viewModel;
+    private MainTask mainTask;
 
     public ViewSubTasksForMainTaskAdapter(Context context) {
         super(DIFF_CALLBACK);
@@ -109,6 +110,10 @@ public class ViewSubTasksForMainTaskAdapter extends ListAdapter<SubTask, ViewSub
             }
         });
 
+    }
+
+    public void setMainTask(MainTask mainTask) {
+        this.mainTask = mainTask;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

@@ -7,6 +7,7 @@ import android.graphics.drawable.shapes.OvalShape;
 import android.support.annotation.NonNull;
 import android.support.v7.recyclerview.extensions.ListAdapter;
 import android.support.v7.util.DiffUtil;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.CollapsibleActionView;
@@ -75,6 +76,21 @@ public class MainTaskAdapter extends ListAdapter<MainTask, MainTaskAdapter.ViewH
         //int day = Integer.parseInt()
         Log.d(TAG, "onBindViewHolder: " + dueDate.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault()));
         parent.dueDate.setText(context.getResources().getString(R.string.due_date, dueDate.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault()), dueDate.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault()), dueDate.get(Calendar.DAY_OF_MONTH), dueDate.get(Calendar.YEAR)));
+
+        //Set colors if overdue
+        if (mainTask.isOverdue()) {
+            parent.card.setCardBackgroundColor(context.getColor(R.color.red));
+            parent.mainTaskName.setTextColor(context.getColor(R.color.colorAccent));
+            parent.dueDate.setTextColor(context.getColor(R.color.colorAccent));
+            parent.percentageComplete.setTextColor(context.getColor(R.color.colorAccent));
+            parent.completed.setTextColor(context.getColor(R.color.colorAccent));
+        } else {
+            parent.card.setCardBackgroundColor(context.getColor(R.color.colorAccent));
+            parent.mainTaskName.setTextAppearance(R.style.TextAppearance_AppCompat_Large);
+            parent.dueDate.setTextColor(context.getColor(R.color.main_task_text_color));
+            parent.percentageComplete.setTextColor(context.getColor(R.color.green));
+            parent.completed.setTextColor(context.getColor(R.color.green));
+        }
     }
 
     /*
@@ -99,6 +115,8 @@ public class MainTaskAdapter extends ListAdapter<MainTask, MainTaskAdapter.ViewH
         private TextView mainTaskName;
         private TextView dueDate;
         private TextView percentageComplete;
+        private TextView completed;
+        private CardView card;
         private OnMainTaskListener onMainTaskListener;
 
         public ViewHolder(@NonNull View itemView, OnMainTaskListener onMainTaskListener) {
@@ -107,6 +125,8 @@ public class MainTaskAdapter extends ListAdapter<MainTask, MainTaskAdapter.ViewH
             mainTaskName = itemView.findViewById(R.id.mtFrag_main_task_name);
             dueDate = itemView.findViewById(R.id.mtFrag_due_date);
             percentageComplete = itemView.findViewById(R.id.mtFrag_percentage);
+            completed = itemView.findViewById(R.id.completed);
+            card = itemView.findViewById(R.id.parent_layout);
             this.onMainTaskListener = onMainTaskListener;
 
             itemView.setOnClickListener(this);

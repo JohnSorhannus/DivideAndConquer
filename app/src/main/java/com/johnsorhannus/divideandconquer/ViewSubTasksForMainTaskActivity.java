@@ -37,6 +37,7 @@ public class ViewSubTasksForMainTaskActivity extends AppCompatActivity {
     TextView textViewMainTaskName;
     TextView textViewDueDate;
     TextView circle;
+    TextView percentageCompleted;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -64,6 +65,7 @@ public class ViewSubTasksForMainTaskActivity extends AppCompatActivity {
         textViewMainTaskName = findViewById(R.id.vmt_main_task_name);
         textViewDueDate = findViewById(R.id.vmt_due_date);
         circle = findViewById(R.id.vmt_circle);
+        percentageCompleted = findViewById(R.id.vmt_percentage);
 
         //Set XML Components
         textViewMainTaskName.setText(mainTask.getName());
@@ -75,6 +77,8 @@ public class ViewSubTasksForMainTaskActivity extends AppCompatActivity {
         ShapeDrawable drawable = new ShapeDrawable(new OvalShape());
         drawable.getPaint().setColor(mainTask.getColor() + 0xFF000000);
         circle.setBackground(drawable);
+
+        percentageCompleted.setText(getResources().getString(R.string.percent, mainTask.getPercentCompleted()));
 
         viewModel = ViewModelProviders.of(this, new ViewSubTasksForMainTaskVMFactory(this.getApplication(), mainTask.getId())).get(ViewSubTasksForMainTaskViewModel.class);
         //Observe LiveData
@@ -88,7 +92,8 @@ public class ViewSubTasksForMainTaskActivity extends AppCompatActivity {
         viewModel.getMainTask().observe(this, new Observer<MainTask>() {
             @Override
             public void onChanged(@Nullable MainTask mainTask) {
-                //adapter.set
+                adapter.setMainTask(mainTask);
+                //percentageCompleted.setText(getResources().getString(R.string.percent, mainTask.getPercentCompleted()));
             }
         });
     }
