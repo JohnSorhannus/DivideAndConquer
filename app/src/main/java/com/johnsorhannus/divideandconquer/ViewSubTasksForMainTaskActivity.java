@@ -37,6 +37,7 @@ public class ViewSubTasksForMainTaskActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private ViewSubTasksForMainTaskViewModel viewModel;
     private ViewSubTasksForMainTaskAdapter adapter;
+    //private MainTask mainTask;
 
     //XML Components
     TextView textViewMainTaskName;
@@ -96,16 +97,16 @@ public class ViewSubTasksForMainTaskActivity extends AppCompatActivity {
                 //adapter.submitList(null);
                 //viewModel.getMainTask().getValue().size();
                 adapter.submitList(subTasks);
+
                 //adapter.notifyDataSetChanged();
             }
         });
-
 
         viewModel.getMainTask().observe(this, new Observer<MainTask>() {
             @Override
             public void onChanged(@Nullable MainTask mainTask) {
                 adapter.setMainTask(mainTask);
-                //percentageCompleted.setText(getResources().getString(R.string.percent, mainTask.getPercentCompleted()));
+                percentageCompleted.setText(getResources().getString(R.string.percent, mainTask.getPercentCompleted()));
             }
         });
 

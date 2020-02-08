@@ -1,6 +1,7 @@
 package com.johnsorhannus.divideandconquer.room;
 
 import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.MutableLiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
@@ -43,8 +44,8 @@ public interface MainTaskDao {
     @Query("SELECT * FROM mainTask WHERE dueDate = (SELECT MAX(dueDate) FROM mainTask);")
     LiveData<MainTask> getLatestDueDate(); //maybe * would work instead
 
-    @Query("SELECT mainTask.id, mainTask.name, mainTask.dueDate, mainTask.color, 0 AS percentCompleted FROM mainTask WHERE mainTask.id = :mainTaskId")
-    LiveData<MainTask> getMainTask(final int mainTaskId);
+    @Query("SELECT mainTask.id, mainTask.name, mainTask.dueDate, mainTask.color, IFNULL((((SELECT COUNT(id) FROM subTask WHERE mainTask.id = subTask.mainTaskId AND subTask.completed = 1) * 100)/(SELECT COUNT(id) FROM subTask WHERE mainTask.id = subTask.mainTaskId)), 0) AS percentCompleted FROM mainTask WHERE mainTask.id = :mainTaskId")
+    LiveData<MainTask>getMainTask(final int mainTaskId);
 
     @Delete
     void delete(MainTask mainTask);
