@@ -89,14 +89,15 @@ public class SubTaskAdapter extends ListAdapter<SubTask, SubTaskAdapter.ViewHold
         viewHolder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Log.d(TAG, "onCheckedChanged: called for subTask " + subTask.getName() + " isChecked = " + isChecked);
+                SubTask newSubTask = new SubTask(subTask);
+                Log.d(TAG, "onCheckedChanged: called for subTask " + newSubTask.getName() + " isChecked = " + isChecked);
                 subTaskViewModel = ViewModelProviders.of((FragmentActivity) context).get(SubTaskViewModel.class);
                 if (isChecked) {
-                    subTask.setCompleted(true);
-                    subTaskViewModel.updateSubTask(subTask);
+                    newSubTask.setCompleted(true);
+                    subTaskViewModel.updateSubTask(newSubTask);
                 } else {
-                    subTask.setCompleted(false);
-                    subTaskViewModel.updateSubTask(subTask);
+                    newSubTask.setCompleted(false);
+                    subTaskViewModel.updateSubTask(newSubTask);
                 }
             }
         });

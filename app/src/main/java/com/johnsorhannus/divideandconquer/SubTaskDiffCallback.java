@@ -13,18 +13,19 @@ public class SubTaskDiffCallback {
         return new DiffUtil.ItemCallback<SubTask>() {
             @Override
             public boolean areItemsTheSame(@NonNull SubTask oldTask, @NonNull SubTask newTask) {
-                Log.d(TAG, "areItemsTheSame: oldTask name: " + oldTask.getName() + " id: " + oldTask.getId() + " ### newTask name: " + newTask.getName() + " id: " + newTask.getId());
+                Log.d(TAG, "areItemsTheSame: " + oldTask.getName() + " " + newTask.getName() + " " + Boolean.toString(oldTask.getId() == newTask.getId()));
                 return oldTask.getId() == newTask.getId();
             }
 
             @Override
             public boolean areContentsTheSame(@NonNull SubTask oldTask, @NonNull SubTask newTask) {
-                Log.d(TAG, "areContentsTheSame: oldTask name: " + oldTask.getName() + " ### newTask name: " + newTask.getName());
+                Log.d(TAG, "areContentsTheSame: oldTask " + oldTask.toString());
+                Log.d(TAG, "areContentsTheSame: newTask " + newTask.toString());
                 boolean contentsSame = oldTask.getName().equals(newTask.getName()) &&
                         oldTask.getDueDate().equals(newTask.getDueDate()) &&
                         oldTask.isCompleted() == newTask.isCompleted() &&
                         oldTask.getMainTaskId() == (newTask.getMainTaskId());
-                Log.d(TAG, "areContentsTheSame: = " + contentsSame);
+                Log.d(TAG, "areContentsTheSame = " + contentsSame);
                 return contentsSame;
             }
 
@@ -33,6 +34,7 @@ public class SubTaskDiffCallback {
             @Override
             public Object getChangePayload(@NonNull SubTask oldTask, @NonNull SubTask newTask) {
                 if (oldTask.isCompleted() != newTask.isCompleted()) {
+                    Log.d(TAG, "getChangePayload = false");
                     return Boolean.FALSE;
                 } else {
                     return null;

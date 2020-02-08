@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import java.util.Calendar;
+import java.util.Objects;
 
 import static android.arch.persistence.room.ForeignKey.CASCADE;
 
@@ -56,5 +57,11 @@ public class SubTask extends Task {
     @Override
     public String toString() {
         return "SubTask[" + super.toString() + ", completed = " + completed + "]";
+    }
+
+    public SubTask(SubTask subTask) {
+        super(subTask);
+        this.completed = subTask.completed;
+        this.mainTaskId = subTask.mainTaskId;
     }
 }

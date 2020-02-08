@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.util.Calendar;
+import java.util.Objects;
 
 public abstract class Task implements Serializable {
 
@@ -78,4 +79,10 @@ public abstract class Task implements Serializable {
         return "name = " + name + ", dueDate = " + DateFormat.getDateInstance().format(dueDate.getTime()) + ", overdue = " + isOverdue();
     }
 
+    //copy constructor
+    public Task(Task t) {
+        this.id = t.id;
+        this.name = t.name;
+        this.dueDate = (Calendar) t.dueDate.clone();
+    }
 }

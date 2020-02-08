@@ -25,6 +25,7 @@ import android.widget.Toast;
 import com.johnsorhannus.divideandconquer.viewmodels.ViewSubTasksForMainTaskVMFactory;
 import com.johnsorhannus.divideandconquer.viewmodels.ViewSubTasksForMainTaskViewModel;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
@@ -89,9 +90,16 @@ public class ViewSubTasksForMainTaskActivity extends AppCompatActivity {
         viewModel.getSubTasks().observe(this, new Observer<List<SubTask>>() {
             @Override
             public void onChanged(@Nullable List<SubTask> subTasks) {
+                //adapter.submitList(null);
+                //adapter.submitList(null);
+
+                //adapter.submitList(null);
+                //viewModel.getMainTask().getValue().size();
                 adapter.submitList(subTasks);
+                //adapter.notifyDataSetChanged();
             }
         });
+
 
         viewModel.getMainTask().observe(this, new Observer<MainTask>() {
             @Override
