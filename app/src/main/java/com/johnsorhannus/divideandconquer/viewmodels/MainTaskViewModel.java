@@ -29,8 +29,8 @@ public class MainTaskViewModel extends AndroidViewModel {
 
     //public LiveData<List<SubTask>> getSubTasks() { return subTasks; }
 
-    public LiveData<List<MainTask>> retrieveActiveMainTasks() {
-        return repository.retrieveActiveMainTasks();
+    public LiveData<List<MainTask>> retrieveActiveMainTasks(final int mainTaskId) {
+        return repository.retrieveActiveMainTasks(mainTaskId);
     }
 
     public void deleteMainTask(MainTask mainTask) { repository.deleteMainTask(mainTask); }

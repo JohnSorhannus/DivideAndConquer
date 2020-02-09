@@ -1,14 +1,9 @@
 package com.johnsorhannus.divideandconquer;
 
-import android.app.Application;
 import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
-import android.net.Uri;
+import android.content.Intent;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -20,14 +15,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
-import android.widget.Toolbar;
 
-import com.johnsorhannus.divideandconquer.room.AppRepository;
 import com.johnsorhannus.divideandconquer.viewmodels.SubTaskViewModel;
 
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 public class SubTaskFragment extends Fragment {
@@ -40,6 +30,7 @@ public class SubTaskFragment extends Fragment {
     private SubTaskViewModel viewModel;
 
     private static final String TAG = "SubTaskFragment";
+    public static final int EDIT_SUBTASK_REQUEST = 1;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -112,6 +103,20 @@ public class SubTaskFragment extends Fragment {
                         }).show();
             }
         }).attachToRecyclerView(recyclerView);
+
+        adapter.setOnItemClickListener(new SubTaskAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(SubTask subTask) {
+                Intent intent = new Intent(getActivity(), AddEditSubTaskActivity.class);
+                /*
+                intent.putExtra("id", subTask.getId());
+                intent.putExtra("name", subTask.getName());
+                intent.put
+                */
+                intent.putExtra("subTask", subTask);
+                startActivityForResult(intent, EDIT_SUBTASK_REQUEST);
+            }
+        });
 
         return rootView;
     }

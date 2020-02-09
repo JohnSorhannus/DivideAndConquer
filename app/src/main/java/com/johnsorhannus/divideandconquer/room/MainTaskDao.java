@@ -1,7 +1,6 @@
 package com.johnsorhannus.divideandconquer.room;
 
 import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MutableLiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
@@ -26,9 +25,9 @@ public interface MainTaskDao {
     @Query("SELECT DISTINCT mainTask.id, mainTask.name, mainTask.dueDate, mainTask.color, 0 AS percentCompleted\n" +
             "FROM mainTask\n" +
             "CROSS JOIN subTask\n" +
-            "WHERE mainTask.dueDate >= :currentDateMillis AND ((mainTask.id = subTask.mainTaskId AND subTask.completed IN (0)) OR mainTask.id != subTask.mainTaskId)\n" +
+            "WHERE mainTask.dueDate >= :currentDateMillis AND ((mainTask.id = subTask.mainTaskId AND subTask.completed IN (0)) OR mainTask.id != subTask.mainTaskId) OR mainTask.id = :mainTaskId\n" +
             "ORDER BY mainTask.dueDate ASC;")
-    LiveData<List<MainTask>> getActiveMainTasks(final long currentDateMillis);
+    LiveData<List<MainTask>> getActiveMainTasks(final long currentDateMillis, final int mainTaskId); //MAIN TASK ID IS TO INCLUDE AN OVERDUE MAIN TASK IN QUERY SO THAT IT IS INCLUDED IN SPINNER WHEN USER EDITS A SUB TASK WHOSE MAIN TASK IS OVERDUE
 
     @Query("SELECT mainTask.id, mainTask.name, mainTask.dueDate, mainTask.color, 0 AS percentCompleted FROM mainTask INNER JOIN subTask on mainTask.id = subTask.mainTaskId GROUP BY mainTask.id HAVING SUM(subTask.completed) = COUNT(*) ORDER BY mainTask.dueDate ASC;")
     LiveData<List<MainTask>> getCompletedMainTasks();

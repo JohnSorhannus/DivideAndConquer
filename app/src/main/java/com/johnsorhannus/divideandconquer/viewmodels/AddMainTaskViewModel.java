@@ -15,6 +15,10 @@ public class AddMainTaskViewModel extends AndroidViewModel {
         repository = new AppRepository(application);
     }
 
+    public long retrieveMaxDueDateForMT(final int mainTaskId) {
+        return repository.retrieveMaxDueDateForMT(mainTaskId);
+    }
+
     public void insertMainTask(MainTask mainTask) {
         repository.insertMainTask(mainTask);
     }

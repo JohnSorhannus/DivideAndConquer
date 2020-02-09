@@ -23,7 +23,7 @@ public class AddSubTaskViewModel extends AndroidViewModel {
         repository.insertSubTask(subTask);
     }
 
-    public LiveData<List<MainTask>> retrieveActiveMainTasks() {
-        return repository.retrieveActiveMainTasks();
+    public LiveData<List<MainTask>> retrieveActiveMainTasks(final int mainTaskId) {
+        return repository.retrieveActiveMainTasks(mainTaskId);
     }
 }

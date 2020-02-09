@@ -16,13 +16,48 @@ import static android.content.ContentValues.TAG;
 public class DatePickerFragment extends DialogFragment {
 
     private static final String MAIN_TASK_DUE_DATE = "MAIN_TASK";
+    private static final String SUB_TASK_DUE_DATE = "SUB_TASK";
+    private static final String MAX_SUB_TASK_DUE_DATE = "MAX_DUE_DATE";
 
     //to pass MainTask to fragment in order to set a max date on picker
-    public static DatePickerFragment newInstance(MainTask mainTask) {
-        
+    public static DatePickerFragment newInstance(SubTask subTask, MainTask mainTask, long maxDueDate) {
         Bundle args = new Bundle();
-        args.putLong(MAIN_TASK_DUE_DATE, mainTask.getDueDate().getTimeInMillis());
-        
+
+        /*
+        try {
+            args.putLong(MAIN_TASK_DUE_DATE, mainTask.getDueDate().getTimeInMillis());
+        } catch (NullPointerException e) {
+
+        }
+
+        try {
+            args.putLong(MAX_SUB_TASK_DUE_DATE, maxDueDate);
+        } catch (NullPointerException e) {
+
+        }
+
+        try {
+            args.putLong(SUB_TASK_DUE_DATE, subTask.getDueDate().getTimeInMillis());
+        }*/
+
+        if (subTask != null) {
+            args.putLong(SUB_TASK_DUE_DATE, subTask.getDueDate().getTimeInMillis());
+        } else {
+            args.putLong(SUB_TASK_DUE_DATE, 0);
+        }
+
+        if (mainTask != null) {
+            args.putLong(MAIN_TASK_DUE_DATE, mainTask.getDueDate().getTimeInMillis());
+        } else {
+            args.putLong(MAIN_TASK_DUE_DATE, 0);
+        }
+
+        if (maxDueDate != 0) {
+            args.putLong(MAX_SUB_TASK_DUE_DATE, maxDueDate);
+        } else {
+            args.putLong(MAX_SUB_TASK_DUE_DATE, 0);
+        }
+
         DatePickerFragment fragment = new DatePickerFragment();
         fragment.setArguments(args);
         return fragment;
@@ -31,21 +66,54 @@ public class DatePickerFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+        //default date
+        //new -- today
+        //edit -- date of sub task/main task
+        long subTaskDueDate = getArguments().getLong(SUB_TASK_DUE_DATE);
+        long mainTaskDueDate = getArguments().getLong(MAIN_TASK_DUE_DATE);
+        long maxSubTaskDueDate = getArguments().getLong(MAX_SUB_TASK_DUE_DATE);
+        //DEFAULT DATE
+        int year;
+        int month;
+        int day;
+
+        boolean editSubTask = subTaskDueDate != 0 && mainTaskDueDate != 0 && maxSubTaskDueDate == 0;
+        boolean editMainTask = subTaskDueDate == 0 && mainTaskDueDate == 0 && maxSubTaskDueDate != 0;
+        boolean newSubTask = subTaskDueDate == 0 && mainTaskDueDate != 0 && maxSubTaskDueDate == 0;
+
+
+        //SET DEFAULT DATE
         Calendar defaultDate = Calendar.getInstance();
-        int year = defaultDate.get(Calendar.YEAR);
-        int month = defaultDate.get(Calendar.MONTH);
-        int day = defaultDate.get(Calendar.DAY_OF_MONTH);
+        if (editSubTask) {
+            defaultDate.setTimeInMillis(subTaskDueDate);
+        } else if (editMainTask) {
+            defaultDate.setTimeInMillis(mainTaskDueDate);
+        } else { //NEW SUBTASK OR MAINTASK
+            defaultDate = Calendar.getInstance();
+        }
+
+        //SET DEFAULT DATE VALUES
+        year = defaultDate.get(Calendar.YEAR);
+        month = defaultDate.get(Calendar.MONTH);
+        day = defaultDate.get(Calendar.DAY_OF_MONTH);
 
         DatePickerDialog dialog = new DatePickerDialog(getActivity(), (DatePickerDialog.OnDateSetListener) getActivity(), year, month, day);
-        dialog.getDatePicker().setMinDate(Calendar.getInstance().getTimeInMillis());
+
+        //SET MIN DATE
+        if (editSubTask) {
+            dialog.getDatePicker().setMinDate(maxSubTaskDueDate);
+        }
+
+        //SET MAX DATE
+        if (newSubTask && editSubTask) {
+            dialog.getDatePicker().setMaxDate(mainTaskDueDate);
+        }
 
         try {
             dialog.getDatePicker().setMaxDate(getArguments().getLong(MAIN_TASK_DUE_DATE));
         } catch (NullPointerException e) {
             Log.d(TAG, "onCreateDialog: No main task");
         }
-
-        //dialog.getDatePicker().setMaxDate(getArguments().getLong(MAIN_TASK_DUE_DATE));
 
         return dialog;
     }

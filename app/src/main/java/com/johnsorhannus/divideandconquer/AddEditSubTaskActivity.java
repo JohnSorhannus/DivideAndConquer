@@ -4,13 +4,9 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.DialogInterface;
-import android.graphics.drawable.ShapeDrawable;
-import android.graphics.drawable.shapes.OvalShape;
+import android.content.Intent;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -33,8 +29,10 @@ import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.List;
 
-public class AddSubTaskActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
-    private static final String TAG = "AddSubTaskActivity";
+public class AddEditSubTaskActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
+    private static final String TAG = "AddEditSubTaskActivity";
+    private static final String SUB_TASK = "subTask";
+
     private AddSubTaskViewModel viewModel;
 
     //XML components
@@ -48,8 +46,10 @@ public class AddSubTaskActivity extends AppCompatActivity implements DatePickerD
 
     //XML components
     //int circleColor;
-    Calendar chosenDate;
-    MainTask chosenMainTask;
+    private Calendar chosenDate;
+    private MainTask chosenMainTask;
+    private int mainTaskId;
+    private SubTask subTask;
 
 
     private MainTaskSpinnerAdapter spinnerAdapter;
@@ -65,11 +65,7 @@ public class AddSubTaskActivity extends AppCompatActivity implements DatePickerD
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //Set title of toolbar
-        setTitle(R.string.add_subtask);
-
         //Set Values
-        chosenDate = null;
 
         //Set UI components
         textInputName = findViewById(R.id.add_subtask_name);
@@ -79,6 +75,9 @@ public class AddSubTaskActivity extends AppCompatActivity implements DatePickerD
         buttonAddSubTask = findViewById(R.id.add_subtask_button);
         mainTaskSpinner = findViewById(R.id.maintask_spinner);
         mainTaskSpinner.setAdapter(spinnerAdapter);
+
+
+
 
         //set adapter
         //spinnerAdapter = new MainTaskSpinnerAdapter(this);
@@ -99,15 +98,83 @@ public class AddSubTaskActivity extends AppCompatActivity implements DatePickerD
             }
         });*/
 
-        viewModel.retrieveActiveMainTasks().observe(this, new Observer<List<MainTask>>() {
+        //If Edit, get intent and fill in fields
+        Intent intent = getIntent();
+        if (intent.hasExtra(SUB_TASK)) {
+            setTitle(R.string.edit_subtask);
+
+            subTask = (SubTask)intent.getSerializableExtra("subTask");
+            textInputName.setText(subTask.getName());
+            mainTaskId = subTask.getMainTaskId();
+            chosenDate = subTask.getDueDate();
+
+            /*
+            int i = 1;
+            MainTask currMT = spinnerAdapter.getItem(0);
+            while (currMT.getId() != mainTaskId) {
+                currMT = spinnerAdapter.getItem(i);
+                i++;
+            }
+            mainTaskSpinner.setSelection(i);
+
+            List<MainTask> list = viewModel.retrieveActiveMainTasks(mainTaskId).getValue();
+            //search for position in list where main task ids match
+            /*
+            int pos;
+            for (int i = 0; i < list.size(); i++) {
+                if (list.get(i).getId() == mainTaskId) {
+
+                }
+            }
+            int i = 0;
+            if (list != null) {
+                while (list.get(i).getId() != mainTaskId) {
+                    i++;
+                }
+            }
+            mainTaskSpinner.setSelection(i);*/
+
+
+            //HANDLE WHAT HAPPENS IF OVERDUE MAINTASK IS SELECTED. WHAT WILL BE IN SPINNER?
+            //MAY DECIDE TO HAVE NO SPINNER IF EDIT AND OVERDUE
+        } else {
+            chosenDate = null;
+            mainTaskId = -1;
+            subTask = null;
+            setTitle(R.string.add_subtask);
+        }
+
+        viewModel.retrieveActiveMainTasks(mainTaskId).observe(this, new Observer<List<MainTask>>() {
             @Override
             public void onChanged(@Nullable List<MainTask> mainTasks) {
                 //spinnerAdapter.getMainTasks(mainTasks);
                 spinnerAdapter = new MainTaskSpinnerAdapter(getApplicationContext(), mainTasks);
                 Log.d(TAG, "onChanged: Loaded main task list of size " + mainTasks.size());
                 mainTaskSpinner.setAdapter(spinnerAdapter);
+
+                if (intent.hasExtra(SUB_TASK)) {
+                    MainTask currMT;
+                    int i;
+                    for (i = 0; i < spinnerAdapter.getCount(); i++) {
+                        currMT = spinnerAdapter.getItem(i);
+                        if (currMT.getId() == mainTaskId) {
+                            break;
+                        }
+                    }
+
+                    /*
+                    int i = 0;
+                    MainTask currMT = spinnerAdapter.getItem(0);
+                    while (currMT.getId() != mainTaskId) {
+                        currMT = spinnerAdapter.getItem(i);
+                        i++;
+                    }*/
+                    mainTaskSpinner.setSelection(i);
+                }
             }
         });
+
+
 
         mainTaskSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -122,7 +189,7 @@ public class AddSubTaskActivity extends AppCompatActivity implements DatePickerD
 
                 Log.d(TAG, "onItemSelected: position = " + position);
                 //set chosenDate to null here?
-                Toast.makeText(AddSubTaskActivity.this, chosenMainTask.getName() + " selected", Toast.LENGTH_SHORT).show();
+                Toast.makeText(AddEditSubTaskActivity.this, chosenMainTask.getName() + " selected", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -143,7 +210,7 @@ public class AddSubTaskActivity extends AppCompatActivity implements DatePickerD
             @Override
             public void onClick(View v) {
                 //DialogFragment datePicker = new DatePickerFragment(); //need to create a date picker fragment for AddSubTask
-                DatePickerFragment datePicker = DatePickerFragment.newInstance(chosenMainTask); //pass main task to picker to set max date
+                DatePickerFragment datePicker = DatePickerFragment.newInstance(subTask, chosenMainTask, 0); //pass main task to picker to set max date
                 datePicker.show(getSupportFragmentManager(), "Date Picker");
                 //datePicker.
                 //((DatePickerFragment) datePicker).setMaxDate(chosenMainTask);
@@ -163,7 +230,7 @@ public class AddSubTaskActivity extends AppCompatActivity implements DatePickerD
 
         //check date
         if (chosenDate == null) {
-            new AlertDialog.Builder(AddSubTaskActivity.this)
+            new AlertDialog.Builder(AddEditSubTaskActivity.this)
                     .setTitle(getString(R.string.no_due_date_title))
                     .setMessage(getString(R.string.no_due_date_message))
                     .setPositiveButton(android.R.string.ok, null)

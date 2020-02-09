@@ -28,6 +28,9 @@ public interface SubTaskDao {
     @Query("SELECT subTask.id, subTask.name, subTask.dueDate, subTask.completed, subTask.mainTaskId FROM subTask WHERE subTask.mainTaskId = :mainTaskId ORDER BY subTask.dueDate ASC")
     LiveData<List<SubTask>> getSubTasksForMainTask(final int mainTaskId);
 
+    @Query("SELECT MAX(dueDate) FROM subTask WHERE mainTaskId = :mainTaskId")
+    long getMaxDueDateForMT(final int mainTaskId);
+
     //testing
     @Query("SELECT count(*) FROM subTask")
     int getNumberOfSubTasks();

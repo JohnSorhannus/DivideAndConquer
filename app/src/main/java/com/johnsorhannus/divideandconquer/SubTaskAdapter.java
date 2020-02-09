@@ -31,10 +31,10 @@ import java.util.Objects;
 public class SubTaskAdapter extends ListAdapter<SubTask, SubTaskAdapter.ViewHolder> {
     private static final String TAG = "SubTaskAdapter";
 
-    //private List<SubTask> subTasks = new ArrayList<>();
     private List<MainTask> mainTasks = new ArrayList<>();
     private Context context;
     private SubTaskViewModel subTaskViewModel;
+    private OnItemClickListener listener;
 
     public SubTaskAdapter(Context context) {
         super(DIFF_CALLBACK);
@@ -142,8 +142,25 @@ public class SubTaskAdapter extends ListAdapter<SubTask, SubTaskAdapter.ViewHold
             circle = itemView.findViewById(R.id.stFrag_circle); //
             checkBox = itemView.findViewById(R.id.stFrag_checkBox);
             card = itemView.findViewById(R.id.parent_layout);
-            //parentLayout = itemView.findViewById(R.id.parent_layout);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    if (listener != null && position != RecyclerView.NO_POSITION) { //IF ONLY MAINTASK IS NOT OVERDUE
+                        listener.onItemClick(getSubTaskAt(position));
+                    }
+                }
+            });
         }
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(SubTask subTask);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
     }
 
     public class DateViewHolder extends RecyclerView.ViewHolder {

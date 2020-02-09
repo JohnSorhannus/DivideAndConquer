@@ -1,7 +1,6 @@
 package com.johnsorhannus.divideandconquer.room;
 
 import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MutableLiveData;
 import android.content.Context;
 import android.os.AsyncTask;
 
@@ -89,8 +88,8 @@ public class AppRepository {
         return database.getMainTaskDao().getOverdueMainTasks(getCurrentDate().getTimeInMillis());
     }
 
-    public LiveData<List<MainTask>> retrieveActiveMainTasks() {
-        return database.getMainTaskDao().getActiveMainTasks(getCurrentDate().getTimeInMillis());
+    public LiveData<List<MainTask>> retrieveActiveMainTasks(final int mainTaskId) {
+        return database.getMainTaskDao().getActiveMainTasks(getCurrentDate().getTimeInMillis(), mainTaskId);
     }
 
     /*public LiveData<Integer> retrieveNumActiveMainTasks() {
@@ -107,6 +106,10 @@ public class AppRepository {
 
     public LiveData<MainTask> retrieveMainTask(final int mainTaskId) {
         return database.getMainTaskDao().getMainTask(mainTaskId);
+    }
+
+    public long retrieveMaxDueDateForMT(final int mainTaskId) {
+        return database.getSubTaskDao().getMaxDueDateForMT(mainTaskId);
     }
 
 
