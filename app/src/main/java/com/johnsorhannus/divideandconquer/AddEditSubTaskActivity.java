@@ -44,13 +44,14 @@ public class AddEditSubTaskActivity extends AppCompatActivity implements DatePic
     private Button buttonAddSubTask;
     private Spinner mainTaskSpinner;
 
-    //XML components
-    //int circleColor;
+    //Data
     private Calendar chosenDate;
     private MainTask chosenMainTask;
     private int mainTaskId;
     private SubTask subTask;
 
+    //Intent
+    private Intent intent = null;
 
     private MainTaskSpinnerAdapter spinnerAdapter;
 
@@ -99,7 +100,7 @@ public class AddEditSubTaskActivity extends AppCompatActivity implements DatePic
         });*/
 
         //If Edit, get intent and fill in fields
-        Intent intent = getIntent();
+        intent = getIntent();
         if (intent.hasExtra(SUB_TASK)) {
             setTitle(R.string.edit_subtask);
 
@@ -107,7 +108,7 @@ public class AddEditSubTaskActivity extends AppCompatActivity implements DatePic
             textInputName.setText(subTask.getName());
             mainTaskId = subTask.getMainTaskId();
             chosenDate = subTask.getDueDate();
-
+            textViewDueDate.setText(DateFormat.getDateInstance().format(chosenDate.getTime()));
             /*
             int i = 1;
             MainTask currMT = spinnerAdapter.getItem(0);
@@ -182,9 +183,10 @@ public class AddEditSubTaskActivity extends AppCompatActivity implements DatePic
                 chosenMainTask = (MainTask) parent.getItemAtPosition(position);
 
                 //if the current date chosen is greater than the due date of the main task, set the chosenDate to null
-                if (chosenDate != null && (chosenMainTask.getDueDate().getTimeInMillis() > DueDateQueryLiterals.getCurrentDate().getTimeInMillis())) {
+                if (chosenDate != null && (chosenDate.getTimeInMillis() > chosenMainTask.getDueDate().getTimeInMillis())) {
                     Log.d(TAG, "onItemSelected: DATE INVALID. SET TO NULL");
                     chosenDate = null;
+                    textViewDueDate.setText(getString(R.string.due_date_add_task));
                 }
 
                 Log.d(TAG, "onItemSelected: position = " + position);
@@ -202,7 +204,7 @@ public class AddEditSubTaskActivity extends AppCompatActivity implements DatePic
             @Override
             public void onClick(View v) {
                 //add sub task
-                addSubTask();
+                submitSubTask();
             }
         });
 
@@ -220,7 +222,7 @@ public class AddEditSubTaskActivity extends AppCompatActivity implements DatePic
         });
     }
 
-    private void addSubTask() {
+    private void submitSubTask() {
         String name = textInputName.getText().toString().trim();
 
         //if user does not enter in a name
@@ -235,6 +237,16 @@ public class AddEditSubTaskActivity extends AppCompatActivity implements DatePic
                     .setMessage(getString(R.string.no_due_date_message))
                     .setPositiveButton(android.R.string.ok, null)
                     .show();
+        } else if (intent.hasExtra("subTask")) {
+            //edit sub task
+            //Change subtask
+            subTask.setName(name);
+            subTask.setDueDate(chosenDate);
+            subTask.setMainTaskId(chosenMainTask.getId());
+            //Copy
+            SubTask newSubTask = new SubTask(subTask);
+            viewModel.updateSubTask(newSubTask);
+            finish();
         } else {
             //add sub task
             viewModel.insertSubTask(new SubTask(name, chosenDate, chosenMainTask.getId()));

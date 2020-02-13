@@ -48,6 +48,10 @@ public class SubTask extends Task {
         return mainTaskId;
     }
 
+    public void setMainTaskId(int id) {
+        mainTaskId = id;
+    }
+
     //required by compiler
     public void setCompleted(boolean completed) {
         this.completed = completed;
