@@ -113,4 +113,10 @@ public class MainTask extends Task implements Serializable { //Serializable impl
         String completedStr = builder.toString();
         return completedStr;
     }
+
+    public MainTask(MainTask mainTask) {
+        super(mainTask);
+        this.color = mainTask.color;
+        this.percentCompleted = mainTask.percentCompleted;
+    }
 }

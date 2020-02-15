@@ -24,4 +24,8 @@ public class AddMainTaskViewModel extends AndroidViewModel {
     public void insertMainTask(MainTask mainTask) {
         repository.insertMainTask(mainTask);
     }
+
+    public void updateMainTask(MainTask mainTask) {
+        repository.updateMainTask(mainTask);
+    }
 }

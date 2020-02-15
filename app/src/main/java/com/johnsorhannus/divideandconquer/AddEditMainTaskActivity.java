@@ -71,8 +71,6 @@ public class AddEditMainTaskActivity extends AppCompatActivity implements DatePi
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
-
         viewModel = ViewModelProviders.of(this).get(AddMainTaskViewModel.class);
 
         //Set UI components
@@ -111,12 +109,16 @@ public class AddEditMainTaskActivity extends AppCompatActivity implements DatePi
         drawable.getPaint().setColor(chosenColor);
         circle.setBackground(drawable);
 
-        viewModel.retrieveMaxDueDateForMT(mainTask.getId()).observe(this, new Observer<SubTask>() {
-            @Override
-            public void onChanged(@Nullable SubTask subTask) {
-                dueDate = subTask.getDueDate().getTimeInMillis();
-            }
-        });
+        if (mainTask != null) {
+            viewModel.retrieveMaxDueDateForMT(mainTask.getId()).observe(this, new Observer<SubTask>() {
+                @Override
+                public void onChanged(@Nullable SubTask subTask) {
+                    if (subTask != null) {
+                        dueDate = subTask.getDueDate().getTimeInMillis();
+                    }
+                }
+            });
+        }
 
         buttonColorPicker.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -171,8 +173,17 @@ public class AddEditMainTaskActivity extends AppCompatActivity implements DatePi
             name = getString(R.string.no_title);
         }
 
-        viewModel.insertMainTask(new MainTask(name, chosenColor, chosenDate));
-        finish();
+        if (intent.hasExtra(MAIN_TASK)) {
+            mainTask.setName(name);
+            mainTask.setDueDate(chosenDate);
+            mainTask.setColor(chosenColor);
+            MainTask newMainTask = new MainTask(mainTask);
+            viewModel.updateMainTask(newMainTask);
+            finish();
+        } else {
+            viewModel.insertMainTask(new MainTask(name, chosenColor, chosenDate));
+            finish();
+        }
     }
 
     @Override
