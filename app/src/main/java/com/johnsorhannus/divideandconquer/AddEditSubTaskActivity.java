@@ -104,7 +104,7 @@ public class AddEditSubTaskActivity extends AppCompatActivity implements DatePic
         if (intent.hasExtra(SUB_TASK)) {
             setTitle(R.string.edit_subtask);
 
-            subTask = (SubTask)intent.getSerializableExtra("subTask");
+            subTask = (SubTask)intent.getSerializableExtra(SUB_TASK);
             textInputName.setText(subTask.getName());
             mainTaskId = subTask.getMainTaskId();
             chosenDate = subTask.getDueDate();

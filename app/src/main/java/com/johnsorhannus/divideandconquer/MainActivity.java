@@ -144,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
 
             case R.id.action_create_maintask:
                 //intent to create maintask activity
-                Intent createMainTaskIntent = new Intent(this, AddMainTaskActivity.class);
+                Intent createMainTaskIntent = new Intent(this, AddEditMainTaskActivity.class);
                 startActivity(createMainTaskIntent);
                 return true;
 

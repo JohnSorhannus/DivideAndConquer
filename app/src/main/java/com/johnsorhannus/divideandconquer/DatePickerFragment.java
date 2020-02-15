@@ -78,7 +78,7 @@ public class DatePickerFragment extends DialogFragment {
         int day;
 
         boolean editSubTask = subTaskDueDate != 0 && mainTaskDueDate != 0 && maxSubTaskDueDate == 0;
-        boolean editMainTask = subTaskDueDate == 0 && mainTaskDueDate == 0 && maxSubTaskDueDate != 0;
+        boolean editMainTask = subTaskDueDate == 0 && mainTaskDueDate != 0 && maxSubTaskDueDate != 0;
         boolean newSubTask = subTaskDueDate == 0 && mainTaskDueDate != 0 && maxSubTaskDueDate == 0;
 
 
@@ -100,19 +100,13 @@ public class DatePickerFragment extends DialogFragment {
         DatePickerDialog dialog = new DatePickerDialog(getActivity(), (DatePickerDialog.OnDateSetListener) getActivity(), year, month, day);
 
         //SET MIN DATE
-        if (editSubTask) {
+        if (editMainTask) {
             dialog.getDatePicker().setMinDate(maxSubTaskDueDate);
         }
 
         //SET MAX DATE
-        if (newSubTask && editSubTask) {
+        if (newSubTask || editSubTask) {
             dialog.getDatePicker().setMaxDate(mainTaskDueDate);
-        }
-
-        try {
-            dialog.getDatePicker().setMaxDate(getArguments().getLong(MAIN_TASK_DUE_DATE));
-        } catch (NullPointerException e) {
-            Log.d(TAG, "onCreateDialog: No main task");
         }
 
         return dialog;

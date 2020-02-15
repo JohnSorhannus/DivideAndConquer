@@ -2,7 +2,9 @@ package com.johnsorhannus.divideandconquer;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
@@ -38,7 +40,9 @@ import java.util.Calendar;
 
 import yuku.ambilwarna.AmbilWarnaDialog;
 
-public class AddMainTaskActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
+public class AddEditMainTaskActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
+    private static final String MAIN_TASK = "mainTask";
+
     private AddMainTaskViewModel viewModel;
 
     //XML components
@@ -49,10 +53,14 @@ public class AddMainTaskActivity extends AppCompatActivity implements DatePicker
     private TextView textViewDueDate;
     private Button buttonAddMainTask;
 
-    //values
-    int chosenColor; //defaults to blue
-    Calendar chosenDate; //defaults to week from current date
+    //DATA/values
+    private int chosenColor; //defaults to blue
+    private Calendar chosenDate; //defaults to week from current date
+    private MainTask mainTask;
+    private long dueDate = 0;
 
+    //Intent
+    private Intent intent = null;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -63,14 +71,9 @@ public class AddMainTaskActivity extends AppCompatActivity implements DatePicker
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //Add title to toolbar
-        setTitle(R.string.add_maintask);
+
 
         viewModel = ViewModelProviders.of(this).get(AddMainTaskViewModel.class);
-
-        //Set Values
-        chosenColor = getResources().getColor(R.color.colorPrimary);
-        chosenDate = DueDateQueryLiterals.getWeekFromNow();
 
         //Set UI components
         textInputName = findViewById(R.id.add_maintask_name);
@@ -80,13 +83,40 @@ public class AddMainTaskActivity extends AppCompatActivity implements DatePicker
 
         //due date
         textViewDueDate = findViewById(R.id.add_maintask_selected_date);
-        textViewDueDate.setText(DateFormat.getDateInstance().format(chosenDate.getTime()));
 
         //circle
         circle = findViewById(R.id.add_maintask_circle);
         ShapeDrawable drawable = new ShapeDrawable(new OvalShape());
+
+        intent = getIntent();
+        if (intent.hasExtra(MAIN_TASK)) {
+            setTitle(R.string.edit_maintask);
+
+            mainTask = (MainTask)intent.getSerializableExtra(MAIN_TASK);
+            textInputName.setText(mainTask.getName());
+            chosenColor = mainTask.getColor();
+            chosenDate = mainTask.getDueDate();
+        } else {
+            //Add title to toolbar
+            setTitle(R.string.add_maintask);
+            mainTask = null;
+            chosenColor = getColor(R.color.colorPrimary);
+            chosenDate = DueDateQueryLiterals.getWeekFromNow();
+        }
+
+        //Set due date text
+        textViewDueDate.setText(DateFormat.getDateInstance().format(chosenDate.getTime()));
+
+        //Set circle color
         drawable.getPaint().setColor(chosenColor);
         circle.setBackground(drawable);
+
+        viewModel.retrieveMaxDueDateForMT(mainTask.getId()).observe(this, new Observer<SubTask>() {
+            @Override
+            public void onChanged(@Nullable SubTask subTask) {
+                dueDate = subTask.getDueDate().getTimeInMillis();
+            }
+        });
 
         buttonColorPicker.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -105,7 +135,7 @@ public class AddMainTaskActivity extends AppCompatActivity implements DatePicker
         buttonDueDatePicker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DialogFragment datePicker = new DatePickerFragment();
+                DialogFragment datePicker = DatePickerFragment.newInstance(null, mainTask, dueDate);
                 datePicker.show(getSupportFragmentManager(), "Date Picker");
             }
         });

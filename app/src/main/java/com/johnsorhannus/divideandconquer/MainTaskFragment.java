@@ -3,10 +3,8 @@ package com.johnsorhannus.divideandconquer;
 import android.app.AlertDialog;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -18,7 +16,6 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.johnsorhannus.divideandconquer.viewmodels.MainTaskViewModel;
 
@@ -28,6 +25,8 @@ public class MainTaskFragment extends Fragment implements MainTaskAdapter.OnMain
     private RecyclerView recyclerView;
     private MainTaskAdapter adapter;
     private MainTaskViewModel viewModel;
+
+    public static final int EDIT_MAINTASK_REQUEST = 1;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -92,6 +91,20 @@ public class MainTaskFragment extends Fragment implements MainTaskAdapter.OnMain
                         .show();
             }
         }).attachToRecyclerView(recyclerView);
+
+        adapter.setOnMainTaskLongClickListener(new MainTaskAdapter.OnMainTaskLongClickListener() {
+            @Override
+            public void onMainTaskLongClick(MainTask mainTask) {
+                Intent intent = new Intent(getActivity(), AddEditMainTaskActivity.class);
+                /*
+                intent.putExtra("id", subTask.getId());
+                intent.putExtra("name", subTask.getName());
+                intent.put
+                */
+                intent.putExtra("mainTask", mainTask);
+                startActivityForResult(intent, EDIT_MAINTASK_REQUEST);
+            }
+        });
 
         return rootView;
     }

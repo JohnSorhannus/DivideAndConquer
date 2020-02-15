@@ -32,4 +32,5 @@
     <string name="delete_maintask_snackbar">Main task \"</string>
     <string name="view_maintask">View Main Task</string>
     <string name="edit_subtask">Edit Sub Task</string>
+    <string name="edit_maintask">Edit Main Task</string>
 </resources>

@@ -30,6 +30,7 @@ public class MainTaskAdapter extends ListAdapter<MainTask, MainTaskAdapter.ViewH
     //private List<MainTask> mainTasks = new ArrayList<>();
     private Context context;
     private OnMainTaskListener onMainTaskListener;
+    private OnMainTaskLongClickListener onMainTaskLongClickListener;
 
 
     public MainTaskAdapter(Context context, OnMainTaskListener onMainTaskListener) {
@@ -130,6 +131,18 @@ public class MainTaskAdapter extends ListAdapter<MainTask, MainTaskAdapter.ViewH
             this.onMainTaskListener = onMainTaskListener;
 
             itemView.setOnClickListener(this);
+
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    int position = getAdapterPosition();
+                    if (onMainTaskLongClickListener != null && position != RecyclerView.NO_POSITION) {
+                        onMainTaskLongClickListener.onMainTaskLongClick(getItem(position));
+                    }
+
+                    return true;
+                }
+            });
         }
 
         @Override
@@ -143,5 +156,13 @@ public class MainTaskAdapter extends ListAdapter<MainTask, MainTaskAdapter.ViewH
 
     public interface OnMainTaskListener {
         void onMainTaskClick(MainTask mainTask);
+    }
+
+    public interface OnMainTaskLongClickListener {
+        void onMainTaskLongClick(MainTask mainTask);
+    }
+
+    public void setOnMainTaskLongClickListener(OnMainTaskLongClickListener listener) {
+        onMainTaskLongClickListener = listener;
     }
 }

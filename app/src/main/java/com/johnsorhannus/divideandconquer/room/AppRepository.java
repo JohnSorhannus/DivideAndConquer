@@ -108,7 +108,7 @@ public class AppRepository {
         return database.getMainTaskDao().getMainTask(mainTaskId);
     }
 
-    public long retrieveMaxDueDateForMT(final int mainTaskId) {
+    public LiveData<SubTask> retrieveMaxDueDateForMT(final int mainTaskId) {
         return database.getSubTaskDao().getMaxDueDateForMT(mainTaskId);
     }
 
