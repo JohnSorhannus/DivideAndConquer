@@ -33,6 +33,7 @@ public class ViewSubTasksForMainTaskAdapter extends ListAdapter<SubTask, ViewSub
     private Context context;
     private ViewSubTasksForMainTaskViewModel viewModel;
     private MainTask mainTask;
+    private OnItemClickListener listener;
 
     public ViewSubTasksForMainTaskAdapter(Context context) {
         super(DIFF_CALLBACK);
@@ -166,6 +167,22 @@ public class ViewSubTasksForMainTaskAdapter extends ListAdapter<SubTask, ViewSub
             dueDate = itemView.findViewById(R.id.vmtCard_date);
             checkBox = itemView.findViewById(R.id.vmtCard_checkBox);
             card = itemView.findViewById(R.id.parent_layout);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    if (listener != null && position != RecyclerView.NO_POSITION) { //IF ONLY MAINTASK IS NOT OVERDUE
+                        listener.onItemClick(getSubTaskAt(position));
+                    }
+                }
+            });
         }
     }
+
+    public interface OnItemClickListener {
+        void onItemClick(SubTask subTask);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) { this.listener = listener; }
 }

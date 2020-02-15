@@ -3,6 +3,7 @@ package com.johnsorhannus.divideandconquer;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
 import android.os.Bundle;
@@ -38,6 +39,8 @@ public class ViewSubTasksForMainTaskActivity extends AppCompatActivity {
     private ViewSubTasksForMainTaskViewModel viewModel;
     private ViewSubTasksForMainTaskAdapter adapter;
     //private MainTask mainTask;
+
+    public static final int EDIT_SUBTASK_REQUEST = 1;
 
     //XML Components
     TextView textViewMainTaskName;
@@ -129,6 +132,15 @@ public class ViewSubTasksForMainTaskActivity extends AppCompatActivity {
                         }).show();
             }
         }).attachToRecyclerView(recyclerView);
+
+        adapter.setOnItemClickListener(new ViewSubTasksForMainTaskAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(SubTask subTask) {
+                Intent intent = new Intent(ViewSubTasksForMainTaskActivity.this, AddEditSubTaskActivity.class);
+                intent.putExtra("subTask", subTask);
+                startActivityForResult(intent, EDIT_SUBTASK_REQUEST);
+            }
+        });
     }
 
     //Creates 'X' on toolbar

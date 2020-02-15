@@ -163,13 +163,4 @@ public class SubTaskAdapter extends ListAdapter<SubTask, SubTaskAdapter.ViewHold
         this.listener = listener;
     }
 
-    public class DateViewHolder extends RecyclerView.ViewHolder {
-        TextView date;
-
-        public DateViewHolder(@NonNull View itemView) {
-            super(itemView);
-            date = itemView.findViewById(R.id.date);
-        }
-    }
-
 }
