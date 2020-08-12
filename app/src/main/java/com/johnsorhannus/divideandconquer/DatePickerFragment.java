@@ -19,8 +19,10 @@ public class DatePickerFragment extends DialogFragment {
     private static final String SUB_TASK_DUE_DATE = "SUB_TASK";
     private static final String MAX_SUB_TASK_DUE_DATE = "MAX_DUE_DATE";
 
+    private static final String CHOSEN_DATE = "CHOSEN_DATE";
+
     //to pass MainTask to fragment in order to set a max date on picker
-    public static DatePickerFragment newInstance(SubTask subTask, MainTask mainTask, long maxDueDate) {
+    public static DatePickerFragment newInstance(SubTask subTask, MainTask mainTask, long maxDueDate, Calendar chosenDate) {
         Bundle args = new Bundle();
 
         /*
@@ -58,6 +60,8 @@ public class DatePickerFragment extends DialogFragment {
             args.putLong(MAX_SUB_TASK_DUE_DATE, 0);
         }
 
+        args.putLong(CHOSEN_DATE, chosenDate.getTimeInMillis());
+
         DatePickerFragment fragment = new DatePickerFragment();
         fragment.setArguments(args);
         return fragment;
@@ -72,6 +76,8 @@ public class DatePickerFragment extends DialogFragment {
         long subTaskDueDate = getArguments().getLong(SUB_TASK_DUE_DATE);
         long mainTaskDueDate = getArguments().getLong(MAIN_TASK_DUE_DATE);
         long maxSubTaskDueDate = getArguments().getLong(MAX_SUB_TASK_DUE_DATE);
+        long chosenDate = getArguments().getLong(CHOSEN_DATE);
+
         //DEFAULT DATE
         int year;
         int month;
@@ -84,12 +90,12 @@ public class DatePickerFragment extends DialogFragment {
 
         //SET DEFAULT DATE
         Calendar defaultDate = Calendar.getInstance();
-        if (editSubTask) {
+        if (editSubTask && subTaskDueDate == chosenDate) {
             defaultDate.setTimeInMillis(subTaskDueDate);
-        } else if (editMainTask) {
+        } else if (editMainTask && mainTaskDueDate == chosenDate) {
             defaultDate.setTimeInMillis(mainTaskDueDate);
-        } else { //NEW SUBTASK OR MAINTASK
-            defaultDate = Calendar.getInstance();
+        } else { //NEW SUBTASK OR MAINTASK OR USER CHANGED DATE SELECTED IN CALENDAR DIALOG
+            defaultDate.setTimeInMillis(chosenDate);
         }
 
         //SET DEFAULT DATE VALUES

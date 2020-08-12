@@ -103,7 +103,7 @@ public class AddEditSubTaskActivity extends AppCompatActivity implements DatePic
         intent = getIntent();
         if (intent.hasExtra(SUB_TASK)) {
             setTitle(R.string.edit_subtask);
-
+            buttonAddSubTask.setText(R.string.edit_subtask);
             subTask = (SubTask)intent.getSerializableExtra(SUB_TASK);
             textInputName.setText(subTask.getName());
             mainTaskId = subTask.getMainTaskId();
@@ -139,10 +139,11 @@ public class AddEditSubTaskActivity extends AppCompatActivity implements DatePic
             //HANDLE WHAT HAPPENS IF OVERDUE MAINTASK IS SELECTED. WHAT WILL BE IN SPINNER?
             //MAY DECIDE TO HAVE NO SPINNER IF EDIT AND OVERDUE
         } else {
-            chosenDate = null;
+            setTitle(R.string.add_subtask);
+            buttonAddSubTask.setText(R.string.add_subtask);
+            chosenDate = DueDateQueryLiterals.getCurrentDate();
             mainTaskId = -1;
             subTask = null;
-            setTitle(R.string.add_subtask);
         }
 
         viewModel.retrieveActiveMainTasks(mainTaskId).observe(this, new Observer<List<MainTask>>() {
@@ -212,7 +213,7 @@ public class AddEditSubTaskActivity extends AppCompatActivity implements DatePic
             @Override
             public void onClick(View v) {
                 //DialogFragment datePicker = new DatePickerFragment(); //need to create a date picker fragment for AddSubTask
-                DatePickerFragment datePicker = DatePickerFragment.newInstance(subTask, chosenMainTask, 0); //pass main task to picker to set max date
+                DatePickerFragment datePicker = DatePickerFragment.newInstance(subTask, chosenMainTask, 0, chosenDate); //pass main task to picker to set max date
                 datePicker.show(getSupportFragmentManager(), "Date Picker");
                 //datePicker.
                 //((DatePickerFragment) datePicker).setMaxDate(chosenMainTask);

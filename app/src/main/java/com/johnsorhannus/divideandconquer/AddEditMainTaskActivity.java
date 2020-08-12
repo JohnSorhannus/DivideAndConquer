@@ -53,7 +53,7 @@ public class AddEditMainTaskActivity extends AppCompatActivity implements DatePi
     private TextView textViewDueDate;
     private Button buttonAddMainTask;
 
-    //DATA/values
+    //DATA values
     private int chosenColor; //defaults to blue
     private Calendar chosenDate; //defaults to week from current date
     private MainTask mainTask;
@@ -89,7 +89,7 @@ public class AddEditMainTaskActivity extends AppCompatActivity implements DatePi
         intent = getIntent();
         if (intent.hasExtra(MAIN_TASK)) {
             setTitle(R.string.edit_maintask);
-
+            buttonAddMainTask.setText(R.string.edit_maintask);
             mainTask = (MainTask)intent.getSerializableExtra(MAIN_TASK);
             textInputName.setText(mainTask.getName());
             chosenColor = mainTask.getColor();
@@ -97,9 +97,10 @@ public class AddEditMainTaskActivity extends AppCompatActivity implements DatePi
         } else {
             //Add title to toolbar
             setTitle(R.string.add_maintask);
+            buttonAddMainTask.setText(R.string.add_maintask);
             mainTask = null;
             chosenColor = getColor(R.color.colorPrimary);
-            chosenDate = DueDateQueryLiterals.getWeekFromNow();
+            chosenDate = DueDateQueryLiterals.getCurrentDate();
         }
 
         //Set due date text
@@ -137,7 +138,7 @@ public class AddEditMainTaskActivity extends AppCompatActivity implements DatePi
         buttonDueDatePicker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DialogFragment datePicker = DatePickerFragment.newInstance(null, mainTask, dueDate);
+                DialogFragment datePicker = DatePickerFragment.newInstance(null, mainTask, dueDate, chosenDate);
                 datePicker.show(getSupportFragmentManager(), "Date Picker");
             }
         });
