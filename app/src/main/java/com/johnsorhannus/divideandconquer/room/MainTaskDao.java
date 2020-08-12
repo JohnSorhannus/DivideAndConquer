@@ -22,11 +22,14 @@ public interface MainTaskDao {
 
     //SUM PROBABLY RETURNS NULL, WHICH IS PROBABLY WHY MAIN TASK DOES NOT SHOW UP IF IT DOES NOT HAVE ANY SUBTASKS ASSOCIATED WITH IT
     //PROBLEM: SQL STATEMENT FAILS WHEN NOTHING EXISTS IN SUBTASK B/C CROSS JOIN PRODUCES (# OF ENTRIES IN MAINTASK x # OF ENTRIES IN SUBTASK) ENTRIES WHICH IS ALWAYS ZERO WITH NO SUBTASKS
-    @Query("SELECT DISTINCT mainTask.id, mainTask.name, mainTask.dueDate, mainTask.color, 0 AS percentCompleted\n" +
+    @Query("SELECT DISTINCT maintask.id,\n" +
+            "maintask.name,\n" +
+            "mainTask.dueDate,\n" +
+            "mainTask.color,\n" +
+            "0 AS percentCompleted\n" +
             "FROM mainTask\n" +
-            "CROSS JOIN subTask\n" +
-            "WHERE mainTask.dueDate >= :currentDateMillis AND ((mainTask.id = subTask.mainTaskId AND subTask.completed IN (0)) OR mainTask.id != subTask.mainTaskId) OR mainTask.id = :mainTaskId\n" +
-            "ORDER BY mainTask.dueDate ASC;")
+            "LEFT JOIN subTask ON mainTask.id = subTask.mainTaskId\n" +
+            "WHERE mainTask.dueDate > :currentDateMillis OR maintask.id = :mainTaskId")
     LiveData<List<MainTask>> getActiveMainTasks(final long currentDateMillis, final int mainTaskId); //MAIN TASK ID IS TO INCLUDE AN OVERDUE MAIN TASK IN QUERY SO THAT IT IS INCLUDED IN SPINNER WHEN USER EDITS A SUB TASK WHOSE MAIN TASK IS OVERDUE
 
     @Query("SELECT mainTask.id, mainTask.name, mainTask.dueDate, mainTask.color, 0 AS percentCompleted FROM mainTask INNER JOIN subTask on mainTask.id = subTask.mainTaskId GROUP BY mainTask.id HAVING SUM(subTask.completed) = COUNT(*) ORDER BY mainTask.dueDate ASC;")

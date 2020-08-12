@@ -29,7 +29,7 @@ public abstract class AppDatabase extends RoomDatabase {
                     context.getApplicationContext(),
                     AppDatabase.class,
                     DATABASE_NAME
-            ).fallbackToDestructiveMigration().addCallback(roomCallback).build();
+            ).fallbackToDestructiveMigration().build();
         }
 
         Log.d(TAG, "getInstance: INSTANCE CREATED");
@@ -41,7 +41,7 @@ public abstract class AppDatabase extends RoomDatabase {
 
     public abstract MainTaskDao getMainTaskDao();
 
-    //TESTING TO POPULATE DATABASE
+    /*//TESTING TO POPULATE DATABASE
     private static RoomDatabase.Callback roomCallback = new RoomDatabase.Callback() {
         @Override
         public void onCreate(@NonNull SupportSQLiteDatabase db) {
@@ -60,9 +60,9 @@ public abstract class AppDatabase extends RoomDatabase {
             subTaskDao = db.getSubTaskDao();
 
             Log.d(TAG, "PopulateDbAsyncTask: CALLED");
-        }
+        }*/
 
-        @Override
+        /*@Override
         protected Void doInBackground(Void... voids) {
             Calendar date = Calendar.getInstance();
             date.set(Calendar.HOUR_OF_DAY, 0);
@@ -111,6 +111,5 @@ public abstract class AppDatabase extends RoomDatabase {
             Log.d(TAG, "doInBackground: DATABASE POPULATED");
 
             return null;
-        }
-    }
+        }*/
 }
